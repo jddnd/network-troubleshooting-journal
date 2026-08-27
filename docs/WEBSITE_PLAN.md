@@ -2,42 +2,21 @@
 
 ## Purpose
 
-Publish traditional network troubleshooting documentation in a clean, searchable web format.
+Publish a network engineering field-note site for troubleshooting, lab work, feature validation, migrations, comparisons and technical experiments.
 
-The website should resemble a technical network documentation portal rather than a blog, narrative case study, or storytelling interface.
+The site should feel like an experienced network engineer's technical blog / notebook: practical, command-heavy, easy to scan, and useful to revisit later. It should not read like a corporate incident report or a narrative case-study product.
 
-The primary navigation model is:
+## Primary information architecture
 
-- **Discipline**
-- **Aspect**
-- **Platform**
+The center of the site remains three independent dimensions:
 
-Troubleshooting documents are indexed records beneath those categories.
+1. **Discipline** — which networking domain?
+2. **Aspect** — what behavior or function is being examined?
+3. **Platform** — where is it implemented or observed?
 
-## Source format
+Field notes sit underneath these dimensions and may be discovered from any of them.
 
-The canonical troubleshooting record is **HTML**.
-
-HTML is used because network documentation often benefits from:
-
-- structured tables
-- configuration summaries
-- collapsible CLI output
-- diagrams
-- topology images
-- before/after configuration comparisons
-- status indicators
-- print-friendly layout
-
-Structured metadata is stored in **JSON** for indexing, filtering, and future search.
-
-Markdown remains suitable for repository standards and contributor guidance.
-
-## Classification architecture
-
-### Discipline
-
-Top-level engineering domains:
+### Disciplines
 
 - Routing
 - Switching
@@ -46,284 +25,109 @@ Top-level engineering domains:
 - Identity
 - PKI
 
-### Aspect
+Classify by the engineering problem, not the vendor appliance implementing the feature.
 
-The specific technical behavior or function being investigated.
+### Aspects
 
-Examples by discipline:
+Examples:
 
-#### Routing
-- BGP
-- OSPF
-- Static Routing
-- VRF
+- BGP Path Selection
 - Route Redistribution
-- Route Leaking
-- MPLS
-- WAN
-- SD-WAN
-- Underlay / Overlay
-- Path Selection
-- SLA / Performance Routing
-- Cloud Routing
-
-#### Switching
-- VLANs
-- STP / RSTP / MST
-- LACP
-- Port Channels
-- Campus Switching
-- Trunks
-- Multicast
-- Layer 2 Troubleshooting
-
-#### Firewall
-- Security Policies
-- NAT
-- Stateful Inspection
-- VPN / IPsec
-- HA
-- Segmentation
-- Application Control
-- Traffic Analysis
-- Session Handling
-
-#### Wireless
-- RF
+- SD-WAN Path Selection
+- STP Convergence
+- NAT / Session Handling
+- Client Roaming
 - RF Cell Sizing
-- Roaming
-- 802.11r / k / v
 - RRM / TPC
-- 5 GHz / 6 GHz
-- WLAN Security
-- Client Troubleshooting
+- Fast Transition
+- 802.1X Authentication
+- Certificate Validation
 
-#### Identity
-- 802.1X
-- RADIUS
-- TACACS+
-- NAC
-- EAP
-- Authorization
-- Profiling
-
-#### PKI
-- Certificates
-- Certificate Authorities
-- EAP-TLS
-- SCEP / EST
-- CRL / OCSP
-- Certificate Lifecycle
-- Chain Validation
-- Certificate Troubleshooting
-
-### Platform
-
-Vendor products and implementation contexts are kept separate from Discipline and Aspect.
+### Platforms
 
 Examples:
 
 - Cisco IOS-XE
 - Cisco Catalyst 9800
-- Cisco CW9176I
-- Cisco SD-WAN
 - Cisco ISE
 - FortiGate
-- Cisco Secure Firewall / FTD
 - Windows 11
-- Intel AX211
 - Microsoft AD CS
 
-The governing rule is:
+A platform can appear in several disciplines and aspects.
 
-> **Classify by the engineering problem, not by the vendor appliance running the feature.**
+## Entry style
 
-Example:
+Entries should resemble normal network-engineering blogs and lab notes. Use the sections that fit the subject rather than forcing every note into an incident template.
 
-```text
-Discipline: Routing
-Aspect: SD-WAN Path Selection
-Platform: FortiGate
-```
+Recommended structure:
 
-not:
+- Context
+- Environment
+- What I wanted to understand
+- What I checked
+- What I observed
+- What I tried
+- Result so far
+- Notes / lessons
+- Next checks
+- Commands used
 
-```text
-Discipline: Firewall
-Aspect: FortiGate SD-WAN
-```
+Other valid entry types include:
 
-## Troubleshooting document structure
+- feature deep dives
+- lab experiments
+- troubleshooting notes
+- migration notes
+- validation posts
+- platform comparisons
+- protocol behavior notes
 
-Every published record should use a conventional technical structure:
+A field note does not need a final root cause. It may document an experiment, unexpected platform behavior, a useful command sequence, a design choice, or a test that ruled something out.
 
-1. **Document Control**
-   - document ID
-   - title
-   - status
-   - discipline
-   - aspect
-   - platform
-   - last updated
+## First field note
 
-2. **Scope**
-   - problem being investigated
-   - included fault domains
-   - exclusions where relevant
+**Investigating Client Roaming and RF Overlap on Cisco Catalyst 9800**
 
-3. **Environment**
-   - devices
-   - software versions
-   - topology role
-   - authentication / security context
+Classification:
 
-4. **Relevant Configuration**
-   - only configuration material to the issue
-   - tables preferred over prose
+- Discipline: Wireless
+- Primary aspect: Client Roaming
+- Other aspects: RF Cell Sizing, RRM/TPC, Fast Transition
+- Platform: Cisco Catalyst 9800 / CW9176I
+- Supporting systems: Cisco ISE, Windows 11, Intel AX211
 
-5. **Reported Symptoms**
-   - user-visible or monitoring-visible behavior
+The entry records practical checks around RADIUS health, FT vs non-FT roaming, a matched AX211/driver comparison, AP-to-AP RSSI, and a controlled 5 GHz power test.
 
-6. **Evidence Summary**
-   - logs
-   - counters
-   - traces
-   - packet captures
-   - RF measurements
-   - endpoint evidence
+## Technical direction
 
-7. **Technical Findings**
-   - numbered findings
-   - fact vs interpretation clearly separated
+V1 stays intentionally simple:
 
-8. **Hypothesis Status**
-   - confirmed
-   - supported
-   - ruled out
-   - open
-
-9. **Change Record**
-   - parameter
-   - before
-   - after
-   - reason
-   - rollback where relevant
-
-10. **Verification**
-    - expected result
-    - observed result
-    - status
-
-11. **Current Technical Assessment**
-    - root-cause status
-    - confidence level
-    - unresolved boundaries
-
-12. **Outstanding Actions**
-
-13. **Appendices**
-    - sanitized CLI
-    - diagrams
-    - packet-flow material
-    - raw supporting evidence
-
-## Website presentation
-
-The website should use traditional documentation conventions:
-
-- restrained visual design
-- navigation / table of contents
-- document-control tables
-- configuration tables
-- evidence tables
-- numbered sections
-- status labels
-- monospace CLI blocks
-- technical diagrams only where useful
-- printable layout
-
-Avoid:
-
-- storytelling language
-- narrative timelines as the primary structure
-- oversized marketing-style headings
-- card-heavy dashboard presentation
-- treating the incident story as the main navigation concept
-
-## Homepage
-
-The homepage is a documentation index, not a case showcase.
-
-It should provide:
-
-1. Discipline index
-2. Aspect index
-3. Platform index
-4. Troubleshooting document register
-
-The document register should show columns such as:
-
-- Document ID
-- Title
-- Discipline
-- Primary Aspect
-- Primary Platform
-- Status
-
-## NTJ-001
-
-The first record is:
-
-```text
-Document: NTJ-001
-Title: Melbourne Office Wi-Fi Call Drops
-Discipline: Wireless
-Primary Aspect: Client Roaming
-Primary Platform: Cisco Catalyst 9800 / CW9176I
-Secondary Aspects: RF Cell Sizing, RRM/TPC, Fast Transition
-Supporting Disciplines: Identity, PKI
-Status: Monitoring
-```
-
-## Technical implementation
-
-V1 remains static:
-
-- semantic HTML
+- semantic HTML for entries
 - shared CSS
 - lightweight JavaScript only where useful
-- local / inline SVG when a technical diagram adds value
-- JSON metadata
-- GitHub Pages deployment
+- SVG / diagrams where they improve understanding
+- JSON classification metadata
+- GitHub as source of truth
+- GitHub Pages for public hosting
 
-A static-site framework is not required unless the number of documents makes automated index generation materially useful.
+No static-site framework is required until search, indexing or generation complexity justifies one.
 
 ## Public/private boundary
 
-Public records must be sanitized before publication.
-
-Remove or generalize:
-
-- company/customer names where necessary
-- usernames
-- internal hostnames
-- internal IP addresses
-- MAC addresses
-- certificate details
-- secrets
-- identifying screenshots or raw logs
-
-The public site is documentation, not a raw operational evidence store.
+Field notes intended for the public site must be sanitized. Remove or generalize internal hostnames, internal IP addresses, usernames, endpoint MAC addresses, certificate details, secrets and identifying operational information unless intentionally disclosed.
 
 ## Future capabilities
 
 - dedicated Discipline pages
 - dedicated Aspect pages
 - dedicated Platform pages
-- cross-filtering across the three dimensions
+- cross-filtering across all three dimensions
 - full-text search
-- protocol tags such as BGP, IPsec, 802.11r, EAP-TLS
-- print / PDF views
-- topology diagrams
-- packet-flow diagrams
+- tags for protocols/mechanisms such as `BGP`, `802.11r`, `IPsec`, `EAP-TLS`
+- diagrams and packet-flow visualizations
+- code / CLI copy buttons
+- related-note suggestions
+- RSS feed
+- print/export views
 - automatic indexes generated from `data/cases.json`
