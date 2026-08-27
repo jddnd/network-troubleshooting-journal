@@ -3,14 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Traditional network troubleshooting documentation for a Cisco Catalyst 9800 wireless roaming and RF investigation." />
-  <title>NTJ-001 · Melbourne Office Wi-Fi Call Drops</title>
+  <meta name="description" content="Field notes from troubleshooting client roaming, 802.11r and RF overlap on Cisco Catalyst 9800." />
+  <title>Investigating Client Roaming and RF Overlap on Cisco Catalyst 9800</title>
   <link rel="stylesheet" href="../../../assets/css/journal.css" />
 </head>
 <body>
   <script type="application/json" id="case-metadata">
   {
     "id": "NTJ-001",
+    "type": "field-note",
     "discipline": "Wireless",
     "secondaryDisciplines": ["Identity", "PKI"],
     "platform": {
@@ -18,331 +19,283 @@
       "family": "Catalyst 9800",
       "components": ["C9800-CL", "CW9176I"]
     },
+    "supportingPlatforms": ["Cisco ISE", "Windows 11", "Intel AX211"],
     "aspect": {
       "primary": "Client Roaming",
       "secondary": ["RF Cell Sizing", "RRM / TPC", "Fast Transition"]
     },
     "mechanisms": ["802.11r", "802.11k", "802.11v", "WPA3-Enterprise", "802.1X", "EAP-TLS", "5 GHz", "6 GHz"],
     "status": "Monitoring",
-    "rootCauseConfidence": "Probable",
-    "publicReady": false
+    "lastUpdated": "2026-08-27"
   }
   </script>
 
   <header class="topbar">
     <div class="site-shell topbar-inner">
-      <a class="brand" href="../../../index.html">Network Troubleshooting <span>Journal</span></a>
-      <nav class="topnav" aria-label="Document navigation">
-        <a href="../../../index.html#disciplines">Discipline</a>
-        <a href="../../../index.html#aspects">Aspect</a>
-        <a href="../../../index.html#platforms">Platform</a>
-        <a href="../../../index.html#documents">Documents</a>
+      <a class="brand" href="../../../index.html">Network Engineering <span>Field Notes</span></a>
+      <nav class="topnav" aria-label="Site navigation">
+        <a href="../../../index.html#disciplines">Disciplines</a>
+        <a href="../../../index.html#aspects">Aspects</a>
+        <a href="../../../index.html#platforms">Platforms</a>
+        <a href="../../../index.html#notes">Field Notes</a>
       </nav>
     </div>
   </header>
 
   <main class="site-shell">
     <header class="page-header">
-      <div class="kicker">Troubleshooting record · NTJ-001</div>
-      <h1>Melbourne Office Wi-Fi Call Drops</h1>
-      <p>Wireless client roaming, Fast Transition and RF cell-sizing investigation on Cisco Catalyst 9800 / CW9176I infrastructure.</p>
+      <div class="kicker">Wireless · Client Roaming · Cisco Catalyst 9800</div>
+      <h1>Investigating Client Roaming and RF Overlap on Cisco Catalyst 9800</h1>
+      <p>Notes from troubleshooting intermittent Wi-Fi interruptions during Teams calls on a small three-AP office deployment.</p>
+      <div class="tag-row">
+        <span class="tag">802.11r</span>
+        <span class="tag">RRM / TPC</span>
+        <span class="tag">RF</span>
+        <span class="tag">WPA3-Enterprise</span>
+        <span class="tag">EAP-TLS</span>
+        <span class="tag">5 GHz</span>
+        <span class="tag">6 GHz</span>
+      </div>
     </header>
 
     <div class="doc-layout">
-      <aside class="doc-toc" aria-label="Document contents">
-        <div class="title">Contents</div>
-        <a href="#control">Document Control</a>
-        <a href="#scope">1. Scope</a>
-        <a href="#environment">2. Environment</a>
-        <a href="#configuration">3. Relevant Configuration</a>
-        <a href="#symptoms">4. Reported Symptoms</a>
-        <a href="#evidence">5. Evidence Summary</a>
-        <a href="#findings">6. Technical Findings</a>
-        <a href="#hypotheses">7. Hypothesis Status</a>
-        <a href="#change">8. Change Record</a>
-        <a href="#verification">9. Verification</a>
-        <a href="#assessment">10. Current Assessment</a>
-        <a href="#outstanding">11. Outstanding Actions</a>
-        <a href="#appendix">Appendix A · CLI Evidence</a>
+      <aside class="doc-toc" aria-label="Field note contents">
+        <div class="title">On this page</div>
+        <a href="#classification">Classification</a>
+        <a href="#context">Context</a>
+        <a href="#environment">Environment</a>
+        <a href="#question">What I wanted to understand</a>
+        <a href="#checks">What I checked</a>
+        <a href="#rf">RF observations</a>
+        <a href="#change">What I tried</a>
+        <a href="#result">Result so far</a>
+        <a href="#lessons">Notes / lessons</a>
+        <a href="#next">Next checks</a>
+        <a href="#commands">Commands used</a>
       </aside>
 
-      <div class="doc-content">
-        <section class="doc-section" id="control">
-          <h2>Document Control</h2>
+      <article class="doc-content">
+        <section class="doc-section" id="classification">
+          <h2>Classification</h2>
           <div class="table-wrap">
             <table>
               <tbody>
-                <tr><th>Document ID</th><td>NTJ-001</td><th>Status</th><td><span class="status warn">Monitoring</span></td></tr>
-                <tr><th>Discipline</th><td>Wireless</td><th>Primary Aspect</th><td>Client Roaming</td></tr>
-                <tr><th>Primary Platform</th><td>Cisco Catalyst 9800 / CW9176I</td><th>Root Cause Status</th><td><span class="status warn">Probable</span></td></tr>
-                <tr><th>Secondary Aspects</th><td>RF Cell Sizing; RRM/TPC; Fast Transition</td><th>Secondary Disciplines</th><td>Identity; PKI</td></tr>
-                <tr><th>Supporting Platforms</th><td>Cisco ISE; Windows 11; Intel AX211</td><th>Last Updated</th><td>2026-08-27</td></tr>
+                <tr><th>Discipline</th><td>Wireless</td></tr>
+                <tr><th>Primary aspect</th><td>Client Roaming</td></tr>
+                <tr><th>Other aspects</th><td>RF Cell Sizing · RRM/TPC · Fast Transition</td></tr>
+                <tr><th>Primary platform</th><td>Cisco Catalyst 9800 / CW9176I</td></tr>
+                <tr><th>Supporting platforms</th><td>Cisco ISE · Windows 11 · Intel AX211</td></tr>
+                <tr><th>Related disciplines</th><td>Identity · PKI</td></tr>
+                <tr><th>Status</th><td><span class="status warn">Monitoring after RF change</span></td></tr>
               </tbody>
             </table>
           </div>
         </section>
 
-        <section class="doc-section" id="scope">
-          <h2>1. Scope</h2>
+        <section class="doc-section" id="context">
+          <h2>Context</h2>
           <div class="content-block">
-            <p>This document records troubleshooting of intermittent Wi-Fi interruptions reported during Microsoft Teams calls at the Melbourne office.</p>
-            <p>The investigation scope includes client roaming, 802.11r Fast Transition, RF cell overlap, RRM/TPC behavior, 802.1X/EAP-TLS authentication, AP/controller control-path health and endpoint wireless behavior.</p>
+            <p>I was troubleshooting reports of intermittent Wi-Fi interruption during Microsoft Teams calls in the Melbourne office. The visible symptom looked like a wireless drop, but that still left several possible fault domains: client radio/driver, roaming, RF coverage and overlap, AP/controller behavior, 802.1X/RADIUS, and EAP-TLS.</p>
+            <p>The purpose of these notes is to record the checks that were useful and the behavior I observed. The investigation is still being monitored after an RF change, so this is not presented as a final root-cause write-up.</p>
           </div>
         </section>
 
         <section class="doc-section" id="environment">
-          <h2>2. Environment</h2>
+          <h2>Environment</h2>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Component</th><th>Platform / Configuration</th><th>Role</th></tr></thead>
+              <thead><tr><th>Item</th><th>Details</th></tr></thead>
               <tbody>
-                <tr><td>Wireless Controller</td><td>Cisco Catalyst 9800-CL, IOS-XE 17.15.04d</td><td>Wireless control plane</td></tr>
-                <tr><td>Access Points</td><td>3 × Cisco CW9176I</td><td>5 GHz and 6 GHz access</td></tr>
-                <tr><td>AP Mode</td><td>FlexConnect</td><td>Local switching, central authentication</td></tr>
-                <tr><td>Identity</td><td>Cisco ISE</td><td>RADIUS / 802.1X authentication</td></tr>
-                <tr><td>Client OS</td><td>Windows 11</td><td>Enterprise endpoints</td></tr>
-                <tr><td>Client Radio</td><td>Intel AX211-class</td><td>5/6 GHz client connectivity</td></tr>
-                <tr><td>Authentication</td><td>WPA3-Enterprise / EAP-TLS</td><td>Enterprise WLAN security</td></tr>
+                <tr><td>Wireless controller</td><td>Cisco Catalyst 9800-CL, IOS-XE 17.15.04d</td></tr>
+                <tr><td>Access points</td><td>3 × Cisco CW9176I</td></tr>
+                <tr><td>AP mode</td><td>FlexConnect, local switching, central authentication</td></tr>
+                <tr><td>WLAN security</td><td>WPA3-Enterprise, PMF required, EAP-TLS</td></tr>
+                <tr><td>Roaming features</td><td>802.11r enabled, 802.11v enabled, neighbor list enabled</td></tr>
+                <tr><td>Bands</td><td>5 GHz and 6 GHz on the same enterprise WLAN</td></tr>
+                <tr><td>Identity</td><td>Cisco ISE / RADIUS</td></tr>
+                <tr><td>Typical client</td><td>Windows 11, Intel AX211-class radio</td></tr>
               </tbody>
             </table>
           </div>
         </section>
 
-        <section class="doc-section" id="configuration">
-          <h2>3. Relevant Configuration</h2>
-          <h3>3.1 WLAN Security and Roaming</h3>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>Setting</th><th>State</th></tr></thead>
-              <tbody>
-                <tr><td>WPA3-Enterprise</td><td>Enabled</td></tr>
-                <tr><td>Protected Management Frames (802.11w)</td><td>Required</td></tr>
-                <tr><td>802.11r Fast Transition</td><td>Enabled</td></tr>
-                <tr><td>FT method</td><td>Over-the-air; FT dot1x enabled</td></tr>
-                <tr><td>802.1X-SHA256</td><td>Enabled</td></tr>
-                <tr><td>802.11v BSS Transition</td><td>Enabled</td></tr>
-                <tr><td>Neighbor List / 802.11k support</td><td>Enabled</td></tr>
-                <tr><td>Bands</td><td>5 GHz and 6 GHz</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h3>3.2 RF Configuration Before Change</h3>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>Band</th><th>Channel Width</th><th>AP Channels</th><th>Actual Tx Power</th><th>RF Profile Limit</th></tr></thead>
-              <tbody>
-                <tr><td>5 GHz</td><td>20 MHz</td><td>100 / 116 / 140</td><td>17 dBm on all three APs</td><td>Min 5 dBm / Max 17 dBm</td></tr>
-                <tr><td>6 GHz</td><td>80 MHz</td><td>5 / 37 / 85</td><td>10 dBm on all three APs</td><td>Min 8 dBm / Max 30 dBm</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <section class="doc-section" id="symptoms">
-          <h2>4. Reported Symptoms</h2>
+        <section class="doc-section" id="question">
+          <h2>What I wanted to understand</h2>
           <div class="content-block">
             <ul>
-              <li>Intermittent Microsoft Teams audio/video interruption.</li>
-              <li>User perception of Wi-Fi disconnects without a consistent visible warning.</li>
-              <li>One Windows WLAN report captured an 802.1X failure stating that the authenticator was no longer present.</li>
+              <li>Were the call interruptions actually related to Wi-Fi roaming?</li>
+              <li>Were clients using 802.11r Fast Transition when they moved between APs?</li>
+              <li>Was ISE/RADIUS adding delay or failing during those transitions?</li>
+              <li>Was the Intel AX211 driver responsible for clients not selecting the FT AKM?</li>
+              <li>Were the three AP cells overlapping strongly enough to encourage unnecessary roaming?</li>
             </ul>
           </div>
-          <div class="note">
-            <strong>Interpretation boundary</strong>
-            The Windows message confirms loss of the 802.1X authenticator from the supplicant perspective. It does not by itself prove that the AP physically failed or stopped responding.
-          </div>
         </section>
 
-        <section class="doc-section" id="evidence">
-          <h2>5. Evidence Summary</h2>
+        <section class="doc-section" id="checks">
+          <h2>What I checked</h2>
+
+          <h3>RADIUS / ISE health</h3>
+          <p>The controller counters did not show a RADIUS transport problem:</p>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Evidence Area</th><th>Observed Result</th><th>Technical Significance</th></tr></thead>
+              <thead><tr><th>Counter</th><th>Observed</th></tr></thead>
               <tbody>
-                <tr><td>RADIUS / AAA</td><td>143,673 authentication requests; 0 timeouts; 0 failovers; 0 retransmissions</td><td>RADIUS transport and server availability are healthy.</td></tr>
-                <tr><td>802.1X aggregate</td><td>17,878 transactions; 17,876 success; 2 failure</td><td>No evidence of a broad authentication failure condition.</td></tr>
-                <tr><td>FT-capable Melbourne client</td><td>11r=True; Fast roam=True; AKM=FT-DOT1X; return to RUN in approximately 20–40 ms</td><td>802.11r operates correctly on the Melbourne WLAN and AP infrastructure.</td></tr>
-                <tr><td>Non-FT Melbourne client</td><td>11r=False; Fast roam=False; AKM=802.1X-SHA256; full DOT1X/EAP-TLS on roam</td><td>At least one client is not negotiating FT and therefore incurs a higher roam cost.</td></tr>
-                <tr><td>Non-FT roam interruption</td><td>Approximately 0.8–1.7 seconds on captured roams</td><td>Sufficient interruption to affect real-time voice/video.</td></tr>
-                <tr><td>Matched endpoint control</td><td>Same Gen4/AX211/driver combination negotiated FT at a reference office</td><td>Hardware generation, AX211 and driver version are not sufficient as the sole cause.</td></tr>
-                <tr><td>Roam frequency</td><td>Rapid AP/BSSID transitions captured, including multiple transitions within seconds</td><td>Roaming frequency itself requires investigation independently of FT.</td></tr>
-                <tr><td>AP neighbor RSSI</td><td>Approximately -41, -42, -49 and -51 dBm</td><td>Indicates very strong 5 GHz inter-cell overlap.</td></tr>
+                <tr><td>Authentication requests</td><td>143,673</td></tr>
+                <tr><td>Timeouts</td><td>0</td></tr>
+                <tr><td>Failovers</td><td>0</td></tr>
+                <tr><td>Retransmissions</td><td>0</td></tr>
+                <tr><td>802.1X transactions</td><td>17,878 total / 17,876 success / 2 failure</td></tr>
               </tbody>
             </table>
           </div>
-        </section>
+          <p>This made ISE/RADIUS instability unlikely as the primary fault domain. One important lesson here: a large number of ISE authentication entries does not automatically mean a large number of hard disconnects. Roams and authentication-state transitions can create entries as well.</p>
 
-        <section class="doc-section" id="findings">
-          <h2>6. Technical Findings</h2>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>ID</th><th>Finding</th><th>Status</th></tr></thead>
-              <tbody>
-                <tr><td>F-01</td><td>ISE/RADIUS availability is not the primary fault domain.</td><td><span class="status good">Established</span></td></tr>
-                <tr><td>F-02</td><td>802.11r Fast Transition works on the Melbourne WLAN for supported/negotiating clients.</td><td><span class="status good">Established</span></td></tr>
-                <tr><td>F-03</td><td>At least one Melbourne client associates using non-FT 802.1X-SHA256 and performs full EAP-TLS on roam.</td><td><span class="status good">Established</span></td></tr>
-                <tr><td>F-04</td><td>The observed client hardware family and wireless driver version do not independently explain the non-FT behavior.</td><td><span class="status good">Established</span></td></tr>
-                <tr><td>F-05</td><td>Clients were observed changing AP/BSSID frequently.</td><td><span class="status good">Established</span></td></tr>
-                <tr><td>F-06</td><td>5 GHz cells exhibit strong overlap while all APs operated at the RF-profile maximum of 17 dBm.</td><td><span class="status good">Established</span></td></tr>
-                <tr><td>F-07</td><td>Historical AP/CAPWAP disconnect events exist but have not been correlated to the current client events.</td><td><span class="status open">Unconfirmed</span></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <section class="doc-section" id="hypotheses">
-          <h2>7. Hypothesis Status</h2>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>Hypothesis</th><th>Status</th><th>Basis</th></tr></thead>
-              <tbody>
-                <tr><td>ISE/RADIUS instability</td><td><span class="status bad">Ruled out</span></td><td>No timeout, failover or retransmission pattern; authentication service remains healthy.</td></tr>
-                <tr><td>Two-hour session reauthentication timer</td><td><span class="status bad">Ruled out / unsupported</span></td><td>Live session values were 86400 seconds and no current 7200-second authorization result was identified.</td></tr>
-                <tr><td>802.11r broken site-wide</td><td><span class="status bad">Ruled out</span></td><td>Another Melbourne client performed genuine FT roams on the same infrastructure.</td></tr>
-                <tr><td>AX211 / driver version cannot use FT</td><td><span class="status bad">Ruled out as sole cause</span></td><td>Matched control client negotiated FT correctly.</td></tr>
-                <tr><td>Subset of clients do not negotiate FT</td><td><span class="status good">Confirmed</span></td><td>Live WLC trace shows 11r=False / Fast roam=False and full DOT1X.</td></tr>
-                <tr><td>Excessive roaming contributes to user impact</td><td><span class="status warn">Supported</span></td><td>Rapid AP/BSSID transitions were captured for FT and non-FT clients.</td></tr>
-                <tr><td>Strong 5 GHz cell overlap contributes to excessive roaming</td><td><span class="status warn">Supported / under test</span></td><td>AP-to-AP RSSI approximately -41 to -51 dBm; all APs were at 17 dBm before tuning.</td></tr>
-                <tr><td>Historical CAPWAP instability is causal</td><td><span class="status open">Open</span></td><td>No timestamp correlation with current client events.</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <section class="doc-section" id="change">
-          <h2>8. Change Record</h2>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>Change ID</th><th>Parameter</th><th>Before</th><th>After</th><th>Purpose</th></tr></thead>
-              <tbody>
-                <tr><td>CHG-01</td><td>5 GHz RF profile maximum transmit power</td><td>17 dBm</td><td>14 dBm</td><td>Reduce 5 GHz cell overlap and evaluate effect on unnecessary roaming.</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="change-box">
-            <strong>Change isolation</strong>
-            6 GHz power, channels, channel width, FT configuration, WLAN security, ISE policy and steering configuration were left unchanged so that the effect of the 5 GHz power change can be evaluated independently.
-          </div>
-          <h3>8.1 Post-change RRM State</h3>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>AP</th><th>5 GHz Channel</th><th>Before</th><th>After TPC Convergence</th></tr></thead>
-              <tbody>
-                <tr><td>AP01</td><td>100</td><td>17 dBm</td><td>14 dBm</td></tr>
-                <tr><td>AP02</td><td>140</td><td>17 dBm</td><td>14 dBm</td></tr>
-                <tr><td>AP03</td><td>116</td><td>17 dBm</td><td>14 dBm</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <p>RRM/TPC remained in AUTO mode with a 600-second update interval.</p>
-        </section>
-
-        <section class="doc-section" id="verification">
-          <h2>9. Verification</h2>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>Verification Item</th><th>Expected Result</th><th>Status</th></tr></thead>
-              <tbody>
-                <tr><td>5 GHz actual transmit power</td><td>All Melbourne APs at 14 dBm or lower</td><td><span class="status good">Verified</span></td></tr>
-                <tr><td>Client RSSI/SNR</td><td>No material coverage degradation at normal work areas and cell edges</td><td><span class="status open">Pending</span></td></tr>
-                <tr><td>Roam frequency</td><td>Reduction in rapid AP/BSSID transitions compared with pre-change traces</td><td><span class="status open">Pending</span></td></tr>
-                <tr><td>FT behavior</td><td>FT-capable clients continue to show 11r=True / Fast roam=True</td><td><span class="status open">Pending</span></td></tr>
-                <tr><td>User experience</td><td>Reduction or elimination of Teams call interruptions</td><td><span class="status open">Pending</span></td></tr>
-                <tr><td>AP/CAPWAP correlation</td><td>No AP control-path event at the same timestamp as a reproduced user incident</td><td><span class="status open">Pending if incident recurs</span></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <section class="doc-section" id="assessment">
-          <h2>10. Current Technical Assessment</h2>
-          <div class="assessment">
-            <strong>Probable root cause</strong>
-            Excessive client roaming associated with strong 5 GHz RF cell overlap is the leading explanation for the observed instability. User impact is amplified on clients that negotiate non-FT 802.1X and therefore perform a full EAP-TLS exchange during each roam.
-          </div>
-          <p>This assessment is not yet confirmed. Confirmation requires after-change evidence from normal office usage showing reduced roam frequency and improved user experience without unacceptable loss of RF coverage.</p>
-        </section>
-
-        <section class="doc-section" id="outstanding">
-          <h2>11. Outstanding Actions</h2>
-          <div class="content-block">
-            <ol>
-              <li>Observe a normal office period with the 14 dBm 5 GHz maximum.</li>
-              <li>Compare post-change roam count and AP/BSSID transition frequency with pre-change traces.</li>
-              <li>Check the original affected endpoint when it is present in the office and identify its negotiated AKM.</li>
-              <li>Determine why the known non-FT client selected AKM 5 while comparable clients select FT AKM 3.</li>
-              <li>If excessive roaming continues, review Melbourne-specific steering features individually before making additional changes.</li>
-              <li>Keep historical CAPWAP instability as a separate hypothesis unless a new incident correlates by timestamp.</li>
-            </ol>
-          </div>
-        </section>
-
-        <section class="doc-section" id="appendix">
-          <h2>Appendix A · Sanitized CLI Evidence</h2>
-
-          <details>
-            <summary>A.1 AAA / 802.1X Counters</summary>
-            <pre>Authentication requests: 143673
-Timeouts: 0
-Failover: 0
-Retransmission: 0
-
-Dot1x transactions:
-Total: 17878
-Success: 17876
-Failure: 2
-
-Elapsed counter period: 19 weeks 16 hours</pre>
-          </details>
-
-          <details>
-            <summary>A.2 5 GHz RF Profile Before Change</summary>
-            <pre>Band: 5 GHz
-Transmit Power Threshold v1: -70 dBm
-Min Transmit Power: 5 dBm
-Max Transmit Power: 17 dBm
-DCA Bandwidth: 20 MHz</pre>
-          </details>
-
-          <details>
-            <summary>A.3 5 GHz RF Profile After Change</summary>
-            <pre>Band: 5 GHz
-Transmit Power Threshold v1: -70 dBm
-Min Transmit Power: 5 dBm
-Max Transmit Power: 14 dBm</pre>
-          </details>
-
-          <details>
-            <summary>A.4 AP Radio State After TPC Convergence</summary>
-            <pre>AP03  5 GHz  20 MHz  14 dBm  Channel 116
-AP02  5 GHz  20 MHz  14 dBm  Channel 140
-AP01  5 GHz  20 MHz  14 dBm  Channel 100</pre>
-          </details>
-
-          <details>
-            <summary>A.5 FT Client</summary>
-            <pre>Roaming = True
+          <h3>Whether FT actually works on the WLAN</h3>
+          <p>One Melbourne client showed genuine fast roaming:</p>
+          <pre>Roaming = True
 11r = True
 Fast roam = True
 AKM = FT-DOT1X
-Observed return to RUN: approximately 20-40 ms</pre>
-          </details>
+Return to RUN: approximately 20–40 ms</pre>
+          <p>That was enough to rule out a site-wide 802.11r configuration failure. The WLAN and AP infrastructure can perform FT.</p>
 
-          <details>
-            <summary>A.6 Non-FT Client</summary>
-            <pre>Roaming = True
+          <h3>A client that was not using FT</h3>
+          <p>Another Melbourne client associated with the non-FT AKM and performed full 802.1X on each captured roam:</p>
+          <pre>Roaming = True
 11r = False
 Fast roam = False
 AKM = 802.1X-SHA256
-Full DOT1X / EAP-TLS during roam
-Observed interruption: approximately 0.8-1.7 seconds</pre>
-          </details>
+Full DOT1X / EAP-TLS during roam</pre>
+          <p>Two observed transitions were roughly 0.8–1.7 seconds. That is easily long enough to be noticeable in real-time voice or video.</p>
+
+          <h3>Matched AX211 / driver test</h3>
+          <p>I tested a same-generation Lenovo with Intel AX211 using the same Windows wireless driver version at a reference office. It still negotiated FT correctly.</p>
+          <pre>Windows wireless driver: 24.20.2.1
+Negotiated AKM: FT-802.1X</pre>
+          <p>That ruled out the AX211 hardware family and that driver version as a sufficient explanation for the Melbourne client selecting the non-FT AKM.</p>
+
+          <h3>Roaming frequency</h3>
+          <p>The non-FT client was observed moving AP02 → AP01 → AP03 in roughly six seconds, crossing bands in the process. A separate FT-capable client was also roaming frequently. That shifted the question from only “how expensive is a roam?” to also “why are these clients roaming this often?”</p>
         </section>
-      </div>
+
+        <section class="doc-section" id="rf">
+          <h2>RF observations</h2>
+          <p>The 5 GHz radios were all running at 17 dBm on separate 20 MHz channels. 6 GHz was running at 10 dBm with 80 MHz channels.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Band</th><th>Channels</th><th>Tx power</th></tr></thead>
+              <tbody>
+                <tr><td>5 GHz</td><td>100 / 116 / 140</td><td>17 dBm on all three APs</td></tr>
+                <tr><td>6 GHz</td><td>5 / 37 / 85</td><td>10 dBm on all three APs</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>The AP-to-AP 5 GHz neighbor measurements were the part that stood out:</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Neighbor relationship</th><th>Approx. RSSI</th></tr></thead>
+              <tbody>
+                <tr><td>AP03 ↔ AP02</td><td>-41 to -42 dBm</td></tr>
+                <tr><td>AP03 ↔ AP01</td><td>about -49 dBm</td></tr>
+                <tr><td>AP02 ↔ AP01</td><td>about -51 dBm</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Those are very strong neighbor levels for a three-AP office. Channel utilization was low, so the concern was not airtime congestion; it was cell overlap and the number of strong roaming candidates available to a client.</p>
+        </section>
+
+        <section class="doc-section" id="change">
+          <h2>What I tried</h2>
+          <p>I made one RF change only: reduce the maximum 5 GHz transmit power from 17 dBm to 14 dBm. I left 6 GHz, channels, WLAN security, FT and ISE unchanged so the result would be easier to interpret.</p>
+          <pre>5 GHz max Tx power
+17 dBm  →  14 dBm
+
+6 GHz: unchanged
+Channels: unchanged
+802.11r: unchanged
+ISE / RADIUS: unchanged</pre>
+
+          <p>After the next TPC cycle, all three 5 GHz radios converged to 14 dBm:</p>
+          <pre>AP01  *4/8 (14 dBm)
+AP02  *4/8 (14 dBm)
+AP03  *4/8 (14 dBm)</pre>
+        </section>
+
+        <section class="doc-section" id="result">
+          <h2>Result so far</h2>
+          <div class="content-block">
+            <p>At this point I am comfortable with the following conclusions:</p>
+            <ul>
+              <li>RADIUS/ISE availability is not showing signs of being the primary problem.</li>
+              <li>802.11r works on the Melbourne WLAN; it is not broken globally.</li>
+              <li>At least one client is choosing non-FT 802.1X-SHA256 and paying the full EAP-TLS cost during roaming.</li>
+              <li>The tested AX211 driver version is not sufficient by itself to explain that non-FT behavior.</li>
+              <li>Clients are roaming frequently enough that roaming behavior itself deserves attention.</li>
+              <li>The 5 GHz cells have very strong overlap, which makes RF cell sizing a reasonable variable to test.</li>
+            </ul>
+            <p>The 17 → 14 dBm change is now active. The next useful evidence is whether real client roam frequency and user experience improve without creating weak edge coverage.</p>
+          </div>
+        </section>
+
+        <section class="doc-section" id="lessons">
+          <h2>Notes / lessons</h2>
+          <div class="content-block">
+            <ul>
+              <li><strong>FT and roaming frequency are separate problems.</strong> 802.11r can make a roam cheap, but it does not explain why a client roams excessively.</li>
+              <li><strong>ISE logs need context.</strong> Authentication-success events should not be counted as disconnects without correlating them to WLC client state.</li>
+              <li><strong>Check the negotiated AKM, not only the WLAN configuration.</strong> FT can be enabled on the SSID while an individual client still selects the non-FT suite.</li>
+              <li><strong>Matched controls are useful.</strong> Reproducing the same hardware/driver combination at another site quickly removed the driver version as the main theory.</li>
+              <li><strong>AP-to-AP RSSI is useful for cell-sizing checks.</strong> Very strong neighbor levels can reveal overlap even when utilization, noise and client RSSI otherwise look healthy.</li>
+              <li><strong>Change one variable at a time.</strong> Keeping 6 GHz, channels, FT and ISE unchanged makes the 5 GHz power test much more useful.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="doc-section" id="next">
+          <h2>Next checks</h2>
+          <div class="content-block">
+            <ul>
+              <li>Compare roam frequency after the 5 GHz power reduction.</li>
+              <li>Watch client RSSI/SNR at the weaker coverage edges.</li>
+              <li>Check whether the originally affected laptop negotiates FT or non-FT when it is next in the office.</li>
+              <li>For the non-FT client, force a clean disconnect/reconnect and verify whether it persistently chooses 802.1X-SHA256.</li>
+              <li>Compare the Windows WLAN profile and advanced adapter properties against a matched FT-capable control.</li>
+              <li>If another call interruption is reported, correlate the Windows timestamp directly with WLC client tracing.</li>
+              <li>Only after that, consider testing Melbourne-specific steering features individually if roam frequency remains excessive.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="doc-section" id="commands">
+          <h2>Commands used</h2>
+          <h3>AAA / 802.1X</h3>
+          <pre>show aaa servers | include Dot1x|Transaction: total|Authen: request
+show aaa servers | include Elapsed</pre>
+
+          <h3>RF profile / power</h3>
+          <pre>show ap rf-profile name RFProfile_5Ghz detail
+show ap rf-profile name RFProfile_6Ghz detail
+show ap dot11 5ghz txpower
+show ap dot11 5ghz summary
+show ap dot11 6ghz summary</pre>
+
+          <h3>Client</h3>
+          <pre>show wireless client mac-address &lt;client-mac&gt; detail
+show logging profile wireless start last &lt;hours&gt; filter mac &lt;client-mac&gt;</pre>
+
+          <h3>Windows</h3>
+          <pre>netsh wlan show interfaces
+netsh wlan show drivers
+netsh wlan show profile name="EE-Office"
+Get-NetAdapterAdvancedProperty -Name "Wi-Fi"
+netsh wlan export profile name="EE-Office" folder=C:\Temp</pre>
+        </section>
+      </article>
     </div>
   </main>
 
-  <footer class="site-shell footer-note">NTJ-001 · Wireless · Client Roaming · Cisco Catalyst 9800 / CW9176I</footer>
+  <footer class="site-shell footer-note">Wireless · Client Roaming · Cisco Catalyst 9800 · Last updated 27 Aug 2026</footer>
 </body>
 </html>
