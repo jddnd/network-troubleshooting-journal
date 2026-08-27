@@ -3,161 +3,106 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="A network troubleshooting fieldbook organized by discipline, aspect and platform." />
+  <meta name="description" content="Network troubleshooting documentation organized by discipline, aspect and platform." />
   <title>Network Troubleshooting Journal</title>
   <link rel="stylesheet" href="assets/css/journal.css" />
-  <style>
-    .axis-nav { display:flex; gap:8px; flex-wrap:wrap; }
-    .axis-nav a { text-decoration:none; color:var(--muted); padding:8px 11px; border-radius:9px; font-size:14px; font-weight:700; }
-    .axis-nav a:hover { background:var(--surface); color:var(--ink); }
-    .axis-intro { padding:72px 0 30px; }
-    .axis-intro h1 { margin:0; max-width:1100px; font-size:clamp(44px,7vw,86px); line-height:.96; letter-spacing:-.058em; }
-    .axis-intro p { max-width:820px; margin:20px 0 0; color:var(--muted); font-size:19px; }
-    .axis-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin:24px 0 48px; }
-    .axis-card { min-height:420px; background:var(--surface); border:1px solid var(--line); border-radius:22px; padding:24px; display:flex; flex-direction:column; }
-    .axis-card .number { color:var(--muted); font-size:12px; font-weight:850; letter-spacing:.12em; }
-    .axis-card h2 { margin:12px 0 8px; font-size:34px; letter-spacing:-.04em; }
-    .axis-card > p { margin:0; color:var(--muted); font-size:15px; }
-    .axis-values { display:flex; flex-wrap:wrap; gap:8px; margin-top:22px; }
-    .axis-value { display:inline-flex; align-items:center; min-height:34px; padding:7px 10px; border:1px solid var(--line); background:var(--surface-soft); border-radius:999px; font-size:13px; font-weight:720; }
-    .axis-card .example { margin-top:auto; padding-top:26px; }
-    .axis-card .example-label { color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.09em; font-weight:850; }
-    .axis-card .example-value { margin-top:5px; font-weight:800; font-size:17px; }
-    .intersection { background:var(--ink); color:#fff; border-radius:22px; padding:30px; margin:0 0 48px; }
-    .intersection .eyebrow { color:#b2ccff; }
-    .intersection h2 { margin:8px 0 10px; font-size:clamp(28px,4vw,46px); letter-spacing:-.045em; }
-    .intersection p { margin:0; color:#cfd4dc; max-width:850px; }
-    .intersection-path { display:grid; grid-template-columns:1fr auto 1fr auto 1fr; gap:12px; align-items:center; margin-top:24px; }
-    .intersection-node { padding:18px; background:#1d2939; border:1px solid #344054; border-radius:14px; }
-    .intersection-node small { display:block; color:#98a2b3; text-transform:uppercase; letter-spacing:.08em; font-weight:800; }
-    .intersection-node strong { display:block; margin-top:5px; font-size:18px; }
-    .intersection-arrow { color:#667085; font-weight:900; font-size:22px; }
-    .investigations { padding-bottom:64px; }
-    .investigations-head { display:flex; justify-content:space-between; align-items:end; gap:16px; flex-wrap:wrap; margin-bottom:14px; }
-    .investigations-head h2 { margin:4px 0 0; font-size:34px; letter-spacing:-.035em; }
-    .secondary-note { color:var(--muted); max-width:720px; margin:8px 0 20px; }
-    @media (max-width:980px) { .axis-grid { grid-template-columns:1fr; } .axis-card { min-height:auto; } }
-    @media (max-width:720px) { .intersection-path { grid-template-columns:1fr; } .intersection-arrow { transform:rotate(90deg); text-align:center; } .axis-nav { display:none; } }
-  </style>
 </head>
 <body>
   <header class="topbar">
     <div class="site-shell topbar-inner">
       <a class="brand" href="index.html">Network Troubleshooting <span>Journal</span></a>
-      <nav class="axis-nav" aria-label="Primary documentation dimensions">
-        <a href="#discipline">Discipline</a>
-        <a href="#aspect">Aspect</a>
-        <a href="#platform">Platform</a>
-        <a href="#investigations">Investigations</a>
+      <nav class="topnav" aria-label="Documentation navigation">
+        <a href="#disciplines">Disciplines</a>
+        <a href="#aspects">Aspects</a>
+        <a href="#platforms">Platforms</a>
+        <a href="#documents">Documents</a>
       </nav>
     </div>
   </header>
 
   <main class="site-shell">
-    <section class="axis-intro">
-      <div class="eyebrow">Network engineering knowledge map</div>
-      <h1>Discipline. Aspect. Platform.</h1>
-      <p>The journal is organized around three questions: which engineering discipline are we working in, what specific aspect are we troubleshooting, and which platform are we investigating? Individual cases are evidence that connects those three dimensions.</p>
-    </section>
+    <header class="page-header">
+      <div class="kicker">Network engineering documentation</div>
+      <h1>Network Troubleshooting Journal</h1>
+      <p>Technical troubleshooting records organized by three primary classification dimensions: <strong>Discipline</strong>, <strong>Aspect</strong> and <strong>Platform</strong>.</p>
+    </header>
 
-    <section class="axis-grid" aria-label="Three documentation dimensions">
-      <article class="axis-card" id="discipline">
-        <div class="number">01 · WHAT DOMAIN?</div>
+    <section class="catalog-grid" aria-label="Primary documentation classifications">
+      <article class="catalog-panel" id="disciplines">
         <h2>Discipline</h2>
-        <p>The engineering domain being exercised. This is about the nature of the problem, not the vendor that implements it.</p>
-        <div class="axis-values" aria-label="Disciplines">
-          <span class="axis-value">Routing</span>
-          <span class="axis-value">Switching</span>
-          <span class="axis-value">Firewall</span>
-          <span class="axis-value">Wireless</span>
-          <span class="axis-value">Identity</span>
-          <span class="axis-value">PKI</span>
-        </div>
-        <div class="example">
-          <div class="example-label">NTJ-001</div>
-          <div class="example-value">Wireless</div>
-        </div>
+        <p>Engineering domain in which the troubleshooting activity belongs.</p>
+        <ul class="catalog-list">
+          <li><span>Routing</span></li>
+          <li><span>Switching</span></li>
+          <li><span>Firewall</span></li>
+          <li><a href="#documents">Wireless</a></li>
+          <li><span>Identity</span></li>
+          <li><span>PKI</span></li>
+        </ul>
       </article>
 
-      <article class="axis-card" id="aspect">
-        <div class="number">02 · WHAT ARE WE EXAMINING?</div>
+      <article class="catalog-panel" id="aspects">
         <h2>Aspect</h2>
-        <p>The specific behavior, subsystem or technical function under investigation. This is where the troubleshooting knowledge becomes precise.</p>
-        <div class="axis-values" aria-label="Current aspects">
-          <span class="axis-value">Client Roaming</span>
-          <span class="axis-value">RF Cell Sizing</span>
-          <span class="axis-value">RRM / TPC</span>
-          <span class="axis-value">Fast Transition</span>
-          <span class="axis-value">802.1X Authentication</span>
-          <span class="axis-value">EAP-TLS</span>
-        </div>
-        <div class="example">
-          <div class="example-label">NTJ-001 primary aspect</div>
-          <div class="example-value">Client Roaming</div>
-        </div>
+        <p>Specific function, subsystem or behavior being investigated.</p>
+        <ul class="catalog-list">
+          <li><a href="#documents">Client Roaming</a></li>
+          <li><a href="#documents">RF Cell Sizing</a></li>
+          <li><a href="#documents">RRM / TPC</a></li>
+          <li><a href="#documents">Fast Transition (802.11r)</a></li>
+          <li><a href="#documents">802.1X Authentication</a></li>
+          <li><a href="#documents">EAP-TLS</a></li>
+        </ul>
       </article>
 
-      <article class="axis-card" id="platform">
-        <div class="number">03 · WHERE IS IT IMPLEMENTED?</div>
+      <article class="catalog-panel" id="platforms">
         <h2>Platform</h2>
-        <p>The product family, operating system or infrastructure on which the behavior is implemented and observed.</p>
-        <div class="axis-values" aria-label="Current platforms">
-          <span class="axis-value">Cisco Catalyst 9800</span>
-          <span class="axis-value">Cisco CW9176I</span>
-          <span class="axis-value">Cisco ISE</span>
-          <span class="axis-value">Windows 11</span>
-          <span class="axis-value">Intel AX211</span>
-        </div>
-        <div class="example">
-          <div class="example-label">NTJ-001 primary platform</div>
-          <div class="example-value">Cisco Catalyst 9800 / CW9176I</div>
-        </div>
+        <p>Vendor platform or system on which the behavior is implemented or observed.</p>
+        <ul class="catalog-list">
+          <li><a href="#documents">Cisco Catalyst 9800</a></li>
+          <li><a href="#documents">Cisco CW9176I</a></li>
+          <li><a href="#documents">Cisco ISE</a></li>
+          <li><a href="#documents">Windows 11</a></li>
+          <li><a href="#documents">Intel AX211</a></li>
+        </ul>
       </article>
     </section>
 
-    <section class="intersection" aria-labelledby="intersection-title">
-      <div class="eyebrow">How the knowledge connects</div>
-      <h2 id="intersection-title">Every investigation sits at an intersection.</h2>
-      <p>The case is not the taxonomy. It is a worked example that links a discipline, an aspect and a platform, then records the evidence and reasoning used to troubleshoot that intersection.</p>
-      <div class="intersection-path" aria-label="NTJ-001 classification path">
-        <div class="intersection-node"><small>Discipline</small><strong>Wireless</strong></div>
-        <div class="intersection-arrow">×</div>
-        <div class="intersection-node"><small>Aspect</small><strong>Client Roaming</strong></div>
-        <div class="intersection-arrow">×</div>
-        <div class="intersection-node"><small>Platform</small><strong>Cisco Catalyst 9800</strong></div>
-      </div>
-    </section>
+    <h2 class="section-title" id="documents">Troubleshooting Documents</h2>
+    <div class="table-wrap">
+      <table aria-label="Troubleshooting document register">
+        <thead>
+          <tr>
+            <th>Document ID</th>
+            <th>Title</th>
+            <th>Discipline</th>
+            <th>Primary Aspect</th>
+            <th>Primary Platform</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="cases/wireless/001-melbourne/index.html">NTJ-001</a></td>
+            <td><a href="cases/wireless/001-melbourne/index.html">Melbourne Office Wi-Fi Call Drops</a></td>
+            <td>Wireless</td>
+            <td>Client Roaming</td>
+            <td>Cisco Catalyst 9800 / CW9176I</td>
+            <td><span class="status warn">Monitoring</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-    <section class="investigations" id="investigations" aria-labelledby="cases-title">
-      <div class="investigations-head">
-        <div>
-          <div class="eyebrow">Worked investigations</div>
-          <h2 id="cases-title">Cases</h2>
-        </div>
-        <span class="badge">1 working case</span>
+    <h2 class="section-title">Classification Method</h2>
+    <div class="doc-section">
+      <h2>Documentation rule</h2>
+      <div class="content-block">
+        <p><strong>Discipline</strong> identifies the engineering domain. <strong>Aspect</strong> identifies the technical behavior being investigated. <strong>Platform</strong> identifies where that behavior is implemented or observed.</p>
+        <p>A troubleshooting record may reference multiple supporting disciplines, aspects and platforms, but one primary value is assigned to each dimension for indexing.</p>
       </div>
-      <p class="secondary-note">Cases sit below the three-category knowledge map. They show how a real problem was investigated at a particular Discipline × Aspect × Platform intersection.</p>
-
-      <div class="case-list">
-        <a class="case-link" href="cases/wireless/001-melbourne/index.html">
-          <div class="eyebrow-row" style="margin-bottom:4px">
-            <span class="eyebrow">Wireless × Client Roaming × Cisco Catalyst 9800</span>
-            <span class="badge warn">Monitoring</span>
-          </div>
-          <h2>Melbourne Office Wi-Fi Call Drops</h2>
-          <p>RF overlap, Fast Transition behavior and client movement were investigated after users reported call interruptions.</p>
-          <div class="tag-row">
-            <span class="tag">RF Cell Sizing</span>
-            <span class="tag">RRM / TPC</span>
-            <span class="tag">802.11r</span>
-            <span class="tag">EAP-TLS</span>
-            <span class="tag">5 / 6 GHz</span>
-          </div>
-        </a>
-      </div>
-    </section>
+    </div>
   </main>
 
-  <footer class="site-shell footer-note">Discipline defines the domain · Aspect defines what is being troubleshot · Platform defines where it is implemented</footer>
+  <footer class="site-shell footer-note">Network Troubleshooting Journal · Technical documentation repository</footer>
 </body>
 </html>
