@@ -2,35 +2,42 @@
 
 ## Purpose
 
-Turn the journal into a visual technical fieldbook that makes network troubleshooting knowledge easy to browse, understand and study.
+Publish traditional network troubleshooting documentation in a clean, searchable web format.
 
-The website should feel like an engineering knowledge map and investigation console, not a personal blog and not a conventional case-list documentation portal.
+The website should resemble a technical network documentation portal rather than a blog, narrative case study, or storytelling interface.
 
-## Source of truth
+The primary navigation model is:
 
-The canonical investigation format is **HTML**.
+- **Discipline**
+- **Aspect**
+- **Platform**
 
-Structured metadata is stored in **JSON** so investigations remain searchable and machine-readable independently of presentation.
+Troubleshooting documents are indexed records beneath those categories.
 
-Shared CSS and lightweight JavaScript provide a consistent visual system and optional interactions. SVG is preferred for topology, reasoning-flow and before/after diagrams that belong to the investigation itself.
+## Source format
 
-Repository-level notes can remain Markdown.
+The canonical troubleshooting record is **HTML**.
 
-## Primary information architecture
+HTML is used because network documentation often benefits from:
 
-The center of the documentation is not the case library. It is three independent knowledge dimensions:
+- structured tables
+- configuration summaries
+- collapsible CLI output
+- diagrams
+- topology images
+- before/after configuration comparisons
+- status indicators
+- print-friendly layout
 
-1. **Discipline** — what engineering domain is being exercised?
-2. **Aspect** — what specific behavior, subsystem or technical function is being investigated?
-3. **Platform** — where is that behavior implemented and observed?
+Structured metadata is stored in **JSON** for indexing, filtering, and future search.
 
-Every investigation exists at an intersection:
+Markdown remains suitable for repository standards and contributor guidance.
 
-**Discipline × Aspect × Platform**
+## Classification architecture
 
 ### Discipline
 
-Current top-level disciplines:
+Top-level engineering domains:
 
 - Routing
 - Switching
@@ -39,107 +46,284 @@ Current top-level disciplines:
 - Identity
 - PKI
 
-A discipline is determined by the engineering behavior being investigated, not by the vendor or appliance implementing it.
-
 ### Aspect
 
-Aspects describe the precise technical subject being troubleshot. Examples:
+The specific technical behavior or function being investigated.
 
-- Client Roaming
-- RF Cell Sizing
-- RRM / TPC
-- Fast Transition
-- BGP Path Selection
+Examples by discipline:
+
+#### Routing
+- BGP
+- OSPF
+- Static Routing
+- VRF
 - Route Redistribution
-- STP Convergence
-- NAT / Session Handling
-- 802.1X Authentication
-- Certificate Validation
+- Route Leaking
+- MPLS
+- WAN
+- SD-WAN
+- Underlay / Overlay
+- Path Selection
+- SLA / Performance Routing
+- Cloud Routing
 
-Aspects can recur across multiple platforms.
+#### Switching
+- VLANs
+- STP / RSTP / MST
+- LACP
+- Port Channels
+- Campus Switching
+- Trunks
+- Multicast
+- Layer 2 Troubleshooting
+
+#### Firewall
+- Security Policies
+- NAT
+- Stateful Inspection
+- VPN / IPsec
+- HA
+- Segmentation
+- Application Control
+- Traffic Analysis
+- Session Handling
+
+#### Wireless
+- RF
+- RF Cell Sizing
+- Roaming
+- 802.11r / k / v
+- RRM / TPC
+- 5 GHz / 6 GHz
+- WLAN Security
+- Client Troubleshooting
+
+#### Identity
+- 802.1X
+- RADIUS
+- TACACS+
+- NAC
+- EAP
+- Authorization
+- Profiling
+
+#### PKI
+- Certificates
+- Certificate Authorities
+- EAP-TLS
+- SCEP / EST
+- CRL / OCSP
+- Certificate Lifecycle
+- Chain Validation
+- Certificate Troubleshooting
 
 ### Platform
 
-Platforms describe implementation context. Examples:
+Vendor products and implementation contexts are kept separate from Discipline and Aspect.
 
-- Cisco Catalyst 9800
+Examples:
+
 - Cisco IOS-XE
+- Cisco Catalyst 9800
+- Cisco CW9176I
+- Cisco SD-WAN
 - Cisco ISE
 - FortiGate
+- Cisco Secure Firewall / FTD
 - Windows 11
+- Intel AX211
 - Microsoft AD CS
 
-Platforms can appear across several disciplines and aspects.
+The governing rule is:
 
-## Role of investigations
+> **Classify by the engineering problem, not by the vendor appliance running the feature.**
 
-Cases / investigations are worked examples beneath the three-dimensional knowledge model. They should not dominate the site's information architecture.
+Example:
 
-An investigation should show how a real problem was approached at one specific intersection, then preserve:
+```text
+Discipline: Routing
+Aspect: SD-WAN Path Selection
+Platform: FortiGate
+```
 
-- problem and impact
-- fault domains
-- visual reasoning path
-- evidence with expandable raw snippets
-- hypothesis register with state
-- topology / RF / packet / flow visualizations where useful
-- controlled experiments with before/after state
-- current root-cause confidence
-- verification plan
-- engineering lessons
+not:
 
-A reader should be able to enter the journal from any of the three dimensions and discover relevant investigations.
+```text
+Discipline: Firewall
+Aspect: FortiGate SD-WAN
+```
 
-## First implementation
+## Troubleshooting document structure
 
-NTJ-001 is classified as:
+Every published record should use a conventional technical structure:
 
-- Discipline: Wireless
-- Primary aspect: Client Roaming
-- Secondary aspects: RF Cell Sizing, RRM/TPC, Fast Transition
-- Platform: Cisco Catalyst 9800 / CW9176I
-- Supporting platforms: Cisco ISE, Windows 11 / Intel AX211
-- Supporting disciplines: Identity, PKI
+1. **Document Control**
+   - document ID
+   - title
+   - status
+   - discipline
+   - aspect
+   - platform
+   - last updated
 
-The homepage should therefore present NTJ-001 as one example of:
+2. **Scope**
+   - problem being investigated
+   - included fault domains
+   - exclusions where relevant
 
-**Wireless × Client Roaming × Cisco Catalyst 9800**
+3. **Environment**
+   - devices
+   - software versions
+   - topology role
+   - authentication / security context
 
-rather than making "Melbourne Wi-Fi Call Drops" the primary organizing concept.
+4. **Relevant Configuration**
+   - only configuration material to the issue
+   - tables preferred over prose
 
-## Technical direction
+5. **Reported Symptoms**
+   - user-visible or monitoring-visible behavior
 
-V1 intentionally uses plain static web primitives:
+6. **Evidence Summary**
+   - logs
+   - counters
+   - traces
+   - packet captures
+   - RF measurements
+   - endpoint evidence
+
+7. **Technical Findings**
+   - numbered findings
+   - fact vs interpretation clearly separated
+
+8. **Hypothesis Status**
+   - confirmed
+   - supported
+   - ruled out
+   - open
+
+9. **Change Record**
+   - parameter
+   - before
+   - after
+   - reason
+   - rollback where relevant
+
+10. **Verification**
+    - expected result
+    - observed result
+    - status
+
+11. **Current Technical Assessment**
+    - root-cause status
+    - confidence level
+    - unresolved boundaries
+
+12. **Outstanding Actions**
+
+13. **Appendices**
+    - sanitized CLI
+    - diagrams
+    - packet-flow material
+    - raw supporting evidence
+
+## Website presentation
+
+The website should use traditional documentation conventions:
+
+- restrained visual design
+- navigation / table of contents
+- document-control tables
+- configuration tables
+- evidence tables
+- numbered sections
+- status labels
+- monospace CLI blocks
+- technical diagrams only where useful
+- printable layout
+
+Avoid:
+
+- storytelling language
+- narrative timelines as the primary structure
+- oversized marketing-style headings
+- card-heavy dashboard presentation
+- treating the incident story as the main navigation concept
+
+## Homepage
+
+The homepage is a documentation index, not a case showcase.
+
+It should provide:
+
+1. Discipline index
+2. Aspect index
+3. Platform index
+4. Troubleshooting document register
+
+The document register should show columns such as:
+
+- Document ID
+- Title
+- Discipline
+- Primary Aspect
+- Primary Platform
+- Status
+
+## NTJ-001
+
+The first record is:
+
+```text
+Document: NTJ-001
+Title: Melbourne Office Wi-Fi Call Drops
+Discipline: Wireless
+Primary Aspect: Client Roaming
+Primary Platform: Cisco Catalyst 9800 / CW9176I
+Secondary Aspects: RF Cell Sizing, RRM/TPC, Fast Transition
+Supporting Disciplines: Identity, PKI
+Status: Monitoring
+```
+
+## Technical implementation
+
+V1 remains static:
 
 - semantic HTML
 - shared CSS
-- lightweight JavaScript
-- inline or local SVG
+- lightweight JavaScript only where useful
+- local / inline SVG when a technical diagram adds value
 - JSON metadata
-- GitHub as source of truth
+- GitHub Pages deployment
 
-No static-site framework is required for the first version. A framework can be introduced later if it materially improves search, indexing or generation without making the investigation format dependent on it.
+A static-site framework is not required unless the number of documents makes automated index generation materially useful.
 
 ## Public/private boundary
 
-Working investigations may contain sensitive operational context and must not be assumed publishable simply because an HTML page exists.
+Public records must be sanitized before publication.
 
-`data/cases.json` carries a `publicReady` flag. Public deployment should publish only sanitized investigations intended for external viewing.
+Remove or generalize:
 
-Before public release remove or generalize company/customer names, usernames, internal hostnames, internal IP addresses, endpoint MAC addresses, certificate details, secrets and identifying screenshots/logs unless intentionally disclosed.
+- company/customer names where necessary
+- usernames
+- internal hostnames
+- internal IP addresses
+- MAC addresses
+- certificate details
+- secrets
+- identifying screenshots or raw logs
+
+The public site is documentation, not a raw operational evidence store.
 
 ## Future capabilities
 
 - dedicated Discipline pages
 - dedicated Aspect pages
 - dedicated Platform pages
-- cross-filtering across all three dimensions
+- cross-filtering across the three dimensions
 - full-text search
-- mechanism / protocol tags such as `802.11r`, `BGP`, `IPsec`, `EAP-TLS`
-- richer topology diagrams
-- packet-flow visualizations
-- evidence provenance
-- case-series grouping for recurring problems
-- export / print views
-- dark mode
+- protocol tags such as BGP, IPsec, 802.11r, EAP-TLS
+- print / PDF views
+- topology diagrams
+- packet-flow diagrams
 - automatic indexes generated from `data/cases.json`
