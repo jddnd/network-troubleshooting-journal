@@ -1,14 +1,16 @@
 # Network Troubleshooting Journal
 
-A visual fieldbook for documenting real network troubleshooting investigations: symptoms, fault domains, hypotheses, evidence, experiments, changes, outcomes, and engineering lessons.
+Traditional network troubleshooting documentation organized by **Discipline**, **Aspect**, and **Platform**.
 
-The goal is not to publish command dumps or post-hoc fixes. The journal is organized around three primary dimensions, with cases acting as worked examples that connect them.
+The repository records technical investigations in a format similar to normal network engineering documentation: document control, scope, environment, relevant configuration, symptoms, evidence, findings, hypothesis status, changes, verification, assessment, outstanding actions, and CLI appendices.
 
-## The three primary dimensions
+## Classification model
+
+Every troubleshooting document is indexed using three independent dimensions.
 
 ### 1. Discipline
 
-What engineering domain is being exercised?
+The engineering domain:
 
 - **Routing**
 - **Switching**
@@ -17,75 +19,72 @@ What engineering domain is being exercised?
 - **Identity**
 - **PKI**
 
-Classification follows the engineering behavior being investigated rather than the vendor or appliance implementing it.
-
-Example: SD-WAN is primarily a **Routing** discipline even when implemented on a firewall platform.
-
 ### 2. Aspect
 
-What specific behavior, subsystem or technical function is being investigated?
+The specific technical function or behavior being investigated.
 
-Examples include:
+Examples:
 
+- BGP Path Selection
+- SD-WAN Path Selection
+- STP Convergence
+- NAT / Session Handling
 - Client Roaming
 - RF Cell Sizing
 - RRM / TPC
-- Fast Transition
-- BGP Path Selection
-- NAT / Session Handling
 - 802.1X Authentication
-- Certificate Validation
-
-The aspect is where the troubleshooting knowledge becomes precise.
+- Certificate Chain Validation
 
 ### 3. Platform
 
-Where is the behavior implemented and observed?
+The implementation on which the aspect is configured or observed.
 
-Examples include:
+Examples:
 
-- Cisco Catalyst 9800
 - Cisco IOS-XE
-- Cisco ISE
+- Cisco SD-WAN
+- Cisco Catalyst 9800
 - FortiGate
+- Cisco ISE
 - Windows 11
 - Microsoft AD CS
 
-A platform does not define the discipline. It is the implementation context in which the aspect is being investigated.
+## Classification principle
 
-## How cases fit
+> **Classify by the engineering problem, not by the vendor appliance running the feature.**
 
-A case is a worked investigation at the intersection of the three primary dimensions:
+For example:
 
-**Discipline × Aspect × Platform**
+- SD-WAN path selection on a FortiGate → **Routing / SD-WAN Path Selection / FortiGate**
+- NAT issue on a FortiGate → **Firewall / NAT / FortiGate**
+- 802.1X authorization issue on Cisco ISE → **Identity / 802.1X Authorization / Cisco ISE**
+- Certificate-chain issue on Cisco ISE → **PKI / Certificate Chain Validation / Cisco ISE**
 
-Example:
+Vendor products therefore belong under **Platform**, not under Discipline or Aspect.
 
-**Wireless × Client Roaming × Cisco Catalyst 9800**
+See [`docs/CLASSIFICATION.md`](docs/CLASSIFICATION.md) for the detailed taxonomy.
 
-Cases then preserve the reasoning path:
+## Troubleshooting document format
 
-**Observation → fault-domain isolation → hypotheses → evidence → falsification → controlled experiment → verification → outcome → lessons**
+The public troubleshooting record is HTML so it can use tables, collapsible CLI evidence, diagrams, and other technical presentation features while still behaving like traditional documentation.
 
-## Documentation model
+A standard record contains:
 
-The journal is HTML-first:
+1. Document Control
+2. Scope
+3. Environment
+4. Relevant Configuration
+5. Reported Symptoms
+6. Evidence Summary
+7. Technical Findings
+8. Hypothesis Status
+9. Change Record
+10. Verification
+11. Current Technical Assessment
+12. Outstanding Actions
+13. Appendices / Raw Evidence
 
-- **HTML tells the investigation** — visual hierarchy, diagrams, timelines, evidence, before/after states and interactions.
-- **JSON describes the investigation** — discipline, aspect, platform, mechanisms, status and searchable metadata.
-- **CSS / SVG make the reasoning visible** — shared visual language and case-specific diagrams.
-- **Markdown remains for repository-level notes and contributor guidance**, not as the canonical public case format.
-
-Each case should explicitly answer:
-
-1. What **discipline** was exercised?
-2. What **aspect** was being investigated?
-3. What **platform** implemented that behavior?
-4. Which **mechanisms / protocols** were involved?
-5. What **symptom** triggered the investigation?
-6. What evidence changed the hypothesis?
-7. What was ruled out, supported, confirmed or left open?
-8. What controlled change was made and how will it be verified?
+HTML is used for the document itself. JSON is used for indexing and metadata. Markdown is used for repository guidance and standards.
 
 ## Repository structure
 
@@ -110,21 +109,23 @@ network-troubleshooting-journal/
 │   ├── identity/
 │   └── pki/
 └── docs/
+    ├── CLASSIFICATION.md
+    └── WEBSITE_PLAN.md
 ```
 
-## First worked investigation
+## NTJ-001
 
-**NTJ-001 — Melbourne Office Wi-Fi Call Drops**
+**Melbourne Office Wi-Fi Call Drops**
 
-- Discipline: Wireless
-- Primary aspect: Client Roaming
-- Secondary aspects: RF Cell Sizing, RRM/TPC, Fast Transition
-- Platform: Cisco Catalyst 9800 / CW9176I
-- Secondary disciplines: Identity, PKI
-- Status: Monitoring after a controlled 5 GHz RF power change
+```text
+Discipline: Wireless
+Primary Aspect: Client Roaming
+Primary Platform: Cisco Catalyst 9800 / CW9176I
+Status: Monitoring
+```
 
-The case is evidence inside the taxonomy, not the center of the taxonomy.
+Secondary aspects include RF Cell Sizing, RRM/TPC, and Fast Transition. Identity and PKI are supporting disciplines because Cisco ISE and EAP-TLS were investigated as possible fault domains.
 
 ## Publication rule
 
-Raw internal evidence stays private. Anything intended for a public website must be sanitized first. Remove or generalize company names, usernames, internal hostnames, IP addresses, MAC addresses, certificate details, secrets, and other identifying infrastructure data unless there is a deliberate reason to publish them.
+Troubleshooting records intended for the public site must be sanitized. Remove or generalize company names, usernames, internal hostnames, internal IP addresses, endpoint MAC addresses, certificate details, secrets, and other identifying infrastructure data unless intentionally published.
