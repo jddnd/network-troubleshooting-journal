@@ -2,13 +2,19 @@
 
 ## Purpose
 
-Turn the Markdown journal into a clean technical fieldbook that makes troubleshooting reasoning easy to browse and study.
+Turn the journal into a visual technical fieldbook that makes troubleshooting reasoning easy to browse, understand and study.
 
-The website should feel like an engineering notebook, not a personal blog.
+The website should feel like an engineering investigation console / fieldbook, not a personal blog and not a conventional documentation portal.
 
 ## Source of truth
 
-GitHub Markdown remains authoritative. The website renders repository content rather than becoming a separate CMS.
+The canonical case format is **HTML**.
+
+Structured metadata is stored in **JSON** so cases remain searchable and machine-readable independently of presentation.
+
+Shared CSS and lightweight JavaScript provide a consistent visual system and optional interactions. SVG is preferred for topology, reasoning-flow and before/after diagrams that belong to the case itself.
+
+Repository-level notes can remain Markdown.
 
 ## Information architecture
 
@@ -21,73 +27,89 @@ Primary navigation:
 - Identity
 - PKI
 
-Secondary discovery:
+Each case is classified across separate dimensions:
 
-- Topics / tags
-- Vendors / products
-- Case status
-- Recently updated
+- discipline
+- secondary disciplines
+- platform
+- primary aspect
+- secondary aspects
+- mechanisms / protocols
+- symptoms
+- case status
+- root-cause confidence
+
+The primary discipline is determined by the engineering behavior being investigated, not by every supporting technology encountered.
 
 ## Case page structure
 
 Each case page should surface:
 
-1. Problem statement
-2. Environment and impact
+1. Classification: discipline → platform → aspect
+2. Problem and impact
 3. Fault domains
-4. Troubleshooting timeline
-5. Evidence
-6. Hypotheses and their state
-7. Controlled experiments
-8. Root cause confidence
-9. Resolution and verification
-10. Engineering lessons
+4. Visual reasoning path
+5. Evidence with expandable raw snippets
+6. Hypothesis register with state
+7. RF / topology / packet / flow visualization where useful
+8. Controlled experiment with before/after state
+9. Current root-cause confidence
+10. Verification plan
+11. Engineering lessons
 
-A visual reasoning timeline should make the investigation path obvious:
+The page should expose the investigation at multiple depths:
 
-```text
-Observation
-   ↓
-Hypothesis
-   ↓
-Evidence
-   ↓
-Supported / Ruled out
-   ↓
-Controlled change
-   ↓
-Verification
-```
+- a reader should understand the case in about 30 seconds from the visual summary,
+- a technical reader should be able to drill into supporting evidence,
+- an agent should be able to parse structured metadata and semantic HTML.
 
-## Suggested stack
+## Technical direction
 
-Initial recommendation:
+V1 intentionally uses plain static web primitives:
 
-- Astro
-- Starlight for documentation/navigation primitives
-- Markdown/MDX content
+- semantic HTML
+- shared CSS
+- lightweight JavaScript
+- inline or local SVG
+- JSON metadata
 - GitHub as source of truth
-- Netlify or GitHub Pages for deployment
 
-The website layer should remain replaceable. Case content and metadata must not depend on a specific frontend framework.
+No static-site framework is required for the first version. A framework can be introduced later if it materially improves search, indexing or case generation without making the case format dependent on it.
 
 ## Public/private boundary
 
-The repository may contain working notes that are not ready for publication. The frontend must only publish cases where frontmatter contains:
+Working cases may contain sensitive operational context and must not be assumed publishable simply because an HTML page exists.
 
-```yaml
-public_ready: true
+`data/cases.json` carries a `publicReady` flag. Public deployment must eventually filter on this metadata and publish only sanitized cases where:
+
+```json
+"publicReady": true
 ```
 
-This creates an explicit sanitization gate before internal troubleshooting evidence becomes public.
+Before public release remove or generalize company/customer names, usernames, internal hostnames, internal IP addresses, endpoint MAC addresses, certificate details, secrets and identifying screenshots/logs unless intentionally disclosed.
+
+## First implementation
+
+NTJ-001 is the design reference:
+
+- Discipline: Wireless
+- Platform: Cisco Catalyst 9800 / CW9176I
+- Primary aspect: Client Roaming
+- Secondary aspects: RF Cell Sizing, RRM/TPC, Fast Transition
+- Supporting disciplines: Identity, PKI
+
+The case uses a reasoning flow, hypothesis-state visualization, expandable evidence, an SVG RF-overlap diagram, and a controlled before/after power experiment.
 
 ## Future capabilities
 
-- Full-text search
-- Cross-domain case discovery
-- Topic pages such as `802.11r`, `BGP`, `IPsec`, `EAP-TLS`
-- Hypothesis status visualization
-- Before/after comparison blocks
-- Sanitized diagrams
-- RSS feed / recent investigations
-- Case-series grouping for recurring problems
+- full-text search
+- filtering by discipline / platform / aspect / mechanism
+- topic pages such as `802.11r`, `BGP`, `IPsec`, `EAP-TLS`
+- richer topology diagrams
+- packet-flow visualizations
+- evidence provenance
+- case-series grouping for recurring problems
+- export / print views
+- dark mode
+- automatic case index generation from `data/cases.json`
+- static deployment through Netlify, Vercel or GitHub Pages after the publication gate is enforced
