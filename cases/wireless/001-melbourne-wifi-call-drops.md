@@ -2,35 +2,68 @@
 title: "Melbourne Office Wi-Fi Call Drops"
 case_id: "001"
 status: "monitoring"
-primary_domain: "wireless"
-domains:
-  - wireless
-  - identity
-  - pki
-topics:
-  - roaming
-  - rf
-  - cell-overlap
-  - 802.11r
-  - 802.11k
-  - 802.11v
-  - rrm
-  - tpc
-  - wpa3-enterprise
-  - 802.1x
-  - eap-tls
-vendors:
-  - Cisco
-products:
-  - Catalyst 9800
-  - CW9176I
-  - Cisco ISE
+
+discipline: "wireless"
+secondary_disciplines:
+  - "identity"
+  - "pki"
+
+primary_platform:
+  vendor: "Cisco"
+  family: "Catalyst 9800"
+  components:
+    - "C9800-CL"
+    - "CW9176I"
+
+supporting_platforms:
+  - vendor: "Cisco"
+    family: "Identity Services Engine"
+    components:
+      - "Cisco ISE"
+
+aspect:
+  primary: "client-roaming"
+  secondary:
+    - "rf-cell-sizing"
+    - "rrm-tpc"
+    - "fast-transition"
+
+mechanisms:
+  - "802.11r"
+  - "802.11k"
+  - "802.11v"
+  - "RRM"
+  - "TPC"
+  - "WPA3-Enterprise"
+  - "802.1X"
+  - "EAP-TLS"
+  - "5 GHz"
+  - "6 GHz"
+
+symptoms:
+  - "Teams call interruptions"
+  - "perceived Wi-Fi disconnects"
+
 first_observed: "2026-08-19"
 last_updated: "2026-08-27"
 public_ready: false
 ---
 
 # Case 001 — Melbourne Office Wi-Fi Call Drops
+
+## Case classification
+
+| Dimension | Classification |
+|---|---|
+| Discipline | Wireless |
+| Primary platform | Cisco Catalyst 9800 / C9800-CL / CW9176I |
+| Primary aspect | Client roaming |
+| Secondary aspects | RF cell sizing · RRM/TPC · Fast Transition |
+| Mechanisms | 802.11r · 802.11k · 802.11v · WPA3-Enterprise · 802.1X · EAP-TLS · 5/6 GHz |
+| Secondary disciplines | Identity · PKI |
+| Supporting platform | Cisco ISE |
+
+This case is primarily a **Wireless** investigation because the behavior being investigated is client connectivity while moving between APs. Identity and PKI are supporting disciplines because RADIUS, 802.1X, and EAP-TLS were investigated as possible fault domains.
 
 ## Problem statement
 
