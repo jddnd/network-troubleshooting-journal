@@ -2,19 +2,54 @@
 title: "Case title"
 case_id: "000"
 status: "investigating"
-primary_domain: "wireless"
-domains:
-  - wireless
-topics:
-  - example-topic
-vendors: []
-products: []
+
+# What engineering discipline owns the problem?
+discipline: "wireless"
+secondary_disciplines: []
+
+# What platform is being investigated?
+primary_platform:
+  vendor: "Cisco"
+  family: "Catalyst 9800"
+  components: []
+supporting_platforms: []
+
+# What part of the platform/technology is under investigation?
+aspect:
+  primary: "client-roaming"
+  secondary: []
+
+# Protocols, features, mechanisms, or standards encountered in the case.
+mechanisms: []
+
+# User-visible or service-visible trigger for the investigation.
+symptoms: []
+
 first_observed: "YYYY-MM-DD"
 last_updated: "YYYY-MM-DD"
 public_ready: false
 ---
 
 # Case 000 — Case title
+
+## Case classification
+
+| Dimension | Classification |
+|---|---|
+| Discipline | Wireless |
+| Primary platform | Cisco Catalyst 9800 |
+| Primary aspect | Client roaming |
+| Secondary aspects | — |
+| Mechanisms | — |
+| Secondary disciplines | — |
+
+The classification answers three different questions:
+
+1. **Discipline** — what engineering domain owns the problem?
+2. **Platform** — what system or product is being investigated?
+3. **Aspect** — what behavior, subsystem, or capability of that platform is under investigation?
+
+Mechanisms such as BGP, 802.11r, EAP-TLS, IPsec, STP, or OCSP describe *how* the relevant aspect works. They are not substitutes for the aspect itself.
 
 ## Problem statement
 
