@@ -1,73 +1,132 @@
-# Classification
+# Classification Standard
 
-The journal is organized around **engineering disciplines**, not vendor product families.
+## Purpose
 
-## Primary domains
+The journal uses three independent classification dimensions:
+
+1. **Discipline** — the network engineering domain.
+2. **Aspect** — the function, protocol, subsystem, or behavior being investigated.
+3. **Platform** — the vendor product, operating system, or implementation on which the aspect is configured or observed.
+
+The three dimensions must not be mixed.
+
+> **Classify by the engineering problem, not by the vendor appliance running the feature.**
+
+A platform may implement several disciplines. A discipline may be implemented by many platforms. An aspect may occur on many platforms.
+
+---
+
+## 1. Discipline taxonomy
 
 ### Routing
-Use for Layer 3 path selection and WAN/overlay behavior.
 
-Typical topics:
+Layer 3 forwarding, path selection, WAN, and overlay behavior.
+
+Typical aspects:
+
 - BGP
 - OSPF
-- Static routing
+- Static Routing
 - VRF
-- Route redistribution
-- Route leaking
+- Route Redistribution
+- Route Leaking
 - MPLS
 - WAN
 - SD-WAN
-- Underlay / overlay
-- SLA / performance routing
-- Cloud routing
+  - Underlay / Overlay
+  - Path Selection
+  - SLA / Performance Routing
+  - Segmentation
+  - Control Plane / Data Plane
+- Cloud Routing
+
+Examples of platforms that may implement these aspects:
+
+- Cisco IOS-XE routers
+- Cisco Catalyst 8000 Edge Platforms
+- Cisco SD-WAN
+- FortiGate Secure SD-WAN
+- Versa
+- Azure networking
+- AWS networking
+
+**Important:** SD-WAN is primarily a Routing discipline even when implemented on a firewall appliance.
 
 ### Switching
-Use for Layer 2 forwarding and campus/data-center switching behavior.
 
-Typical topics:
+Layer 2 forwarding, segmentation, loop prevention, and campus/data-center switching behavior.
+
+Typical aspects:
+
 - VLANs
-- Trunks
 - STP / RSTP / MST
 - LACP
-- Port channels
-- Campus switching
+- Port Channels / EtherChannel
+- Campus Switching
+- Trunks
 - Multicast
-- Layer 2 loops
+- Layer 2 Troubleshooting
+
+Example platforms:
+
+- Cisco Catalyst 9000
+- Cisco Nexus
+- Aruba CX
 
 ### Firewall
-Use for stateful security enforcement and traffic-policy behavior.
 
-Typical topics:
-- Security policies
+Stateful traffic inspection, policy enforcement, network security boundaries, and session handling.
+
+Typical aspects:
+
+- Security Policies
 - NAT
-- Stateful inspection
-- IPsec / VPN
-- HA
+- Stateful Inspection
+- VPN / IPsec
+- High Availability
 - Segmentation
-- Application control
-- Session tables
-- Traffic analysis
+- Application Control
+- Traffic Analysis
+- Session Handling
+
+Example platforms:
+
+- FortiGate
+- Cisco Secure Firewall / FTD
+- Cisco ASA
+- Palo Alto Networks firewalls
 
 ### Wireless
-Use for 802.11, RF, association, roaming, and WLAN behavior.
 
-Typical topics:
+802.11 operation, RF, association, roaming, and WLAN behavior.
+
+Typical aspects:
+
 - RF
-- Cell sizing
+- RF Cell Sizing
 - Roaming
-- 802.11r / k / v
+- 802.11r / 802.11k / 802.11v
 - RRM / TPC
 - 5 GHz / 6 GHz
-- WLAN security
-- Client troubleshooting
+- WLAN Security
+- Client Troubleshooting
 - Interference
-- Channel planning
+- Channel Planning
+
+Example platforms:
+
+- Cisco Catalyst 9800
+- Cisco CW9176I / CW916x
+- Aruba Mobility / Central
+- Juniper Mist
+- Windows wireless clients
 
 ### Identity
-Use for network access identity, policy, and AAA.
 
-Typical topics:
-- Cisco ISE
+Network access identity, AAA, access policy, and endpoint authorization.
+
+Typical aspects:
+
 - 802.1X
 - RADIUS
 - TACACS+
@@ -75,53 +134,151 @@ Typical topics:
 - EAP
 - Authorization
 - Profiling
+- Authentication Policy
+- Authorization Policy
+
+Example platforms:
+
+- Cisco ISE
+- Aruba ClearPass
+- Microsoft NPS
 
 ### PKI
-Use for trust, certificates, and certificate lifecycle.
 
-Typical topics:
+Trust, certificates, certificate validation, and certificate lifecycle.
+
+Typical aspects:
+
 - Certificates
-- Certificate authorities
+- Certificate Authorities
 - EAP-TLS
 - SCEP / EST
 - CRL / OCSP
-- Certificate lifecycle
-- Chain validation
-- Certificate troubleshooting
+- Certificate Lifecycle
+- Chain Validation
+- Certificate Troubleshooting
 
-## Classification rule
+Example platforms:
 
-Choose the primary domain by asking:
+- Microsoft AD CS
+- Microsoft Intune certificate services
+- Cisco ISE certificate services
+- Public / private certificate authorities
 
-> **What engineering behavior are we actually troubleshooting?**
+---
 
-Do not classify by the box that happens to implement the feature.
+## 2. Aspect rules
+
+An aspect describes **what technical behavior is being investigated**.
 
 Examples:
 
-- Cisco SD-WAN edge routing problem → **Routing**
-- FortiGate SD-WAN path-selection problem → **Routing** primary, **Firewall** secondary
-- FortiGate NAT/session problem → **Firewall**
-- Wi-Fi EAP-TLS authentication failure → **Wireless** primary if the failure is association/roaming related; **Identity** or **PKI** primary if the evidence points to AAA or certificate validation
+- `SD-WAN Path Selection`
+- `BGP Route Selection`
+- `NAT Session Handling`
+- `Client Roaming`
+- `RRM / TPC`
+- `802.1X Authentication`
+- `Certificate Chain Validation`
 
-## Multi-domain cases
+Do not use a vendor product as an aspect.
 
-Each case should have exactly one `primary_domain`, but may include multiple `domains` and `topics`.
+Incorrect:
 
-Example:
+- `Cisco ISE` as an Identity aspect
+- `FortiGate` as a Firewall aspect
+- `Cisco SD-WAN` as a Routing aspect
 
-```yaml
-primary_domain: wireless
-domains:
-  - wireless
-  - identity
-  - pki
-topics:
-  - roaming
-  - 802.11r
-  - rrm
-  - tpc
-  - eap-tls
+Correct:
+
+- Discipline: `Identity`; Aspect: `802.1X Authorization`; Platform: `Cisco ISE`
+- Discipline: `Firewall`; Aspect: `NAT`; Platform: `FortiGate`
+- Discipline: `Routing`; Aspect: `SD-WAN Path Selection`; Platform: `Cisco SD-WAN`
+
+---
+
+## 3. Platform rules
+
+A platform describes **where the aspect is implemented, configured, measured, or observed**.
+
+A platform can be:
+
+- network operating system
+- appliance / controller family
+- cloud networking service
+- endpoint operating system
+- authentication / PKI product
+
+Examples:
+
+- Cisco Catalyst 9800
+- Cisco IOS-XE
+- Cisco SD-WAN
+- FortiGate
+- Cisco ISE
+- Windows 11
+- Intel AX211
+- Microsoft AD CS
+
+A platform does not determine the discipline.
+
+---
+
+## 4. Cross-discipline classification
+
+Each troubleshooting document has one primary discipline, one primary aspect, and one primary platform. Supporting values may also be recorded.
+
+Example — FortiGate SD-WAN path-selection issue:
+
+```text
+Discipline: Routing
+Primary Aspect: SD-WAN Path Selection
+Primary Platform: FortiGate
+Secondary Discipline: Firewall
+Supporting Aspects: SLA / Performance Routing, IPsec
 ```
 
-This keeps navigation simple while preserving the fact that real incidents often cross fault domains.
+Example — FortiGate NAT issue:
+
+```text
+Discipline: Firewall
+Primary Aspect: NAT / Session Handling
+Primary Platform: FortiGate
+```
+
+Example — Cisco ISE certificate validation issue:
+
+```text
+Discipline: PKI
+Primary Aspect: Certificate Chain Validation
+Primary Platform: Cisco ISE
+Secondary Discipline: Identity
+```
+
+---
+
+## 5. NTJ-001 classification
+
+The Melbourne troubleshooting record is classified as:
+
+```text
+Discipline: Wireless
+Primary Aspect: Client Roaming
+Primary Platform: Cisco Catalyst 9800 / CW9176I
+
+Secondary Aspects:
+- RF Cell Sizing
+- RRM / TPC
+- Fast Transition (802.11r)
+
+Secondary Disciplines:
+- Identity
+- PKI
+
+Supporting Platforms:
+- Cisco ISE
+- Windows 11
+- Intel AX211
+```
+
+This keeps the troubleshooting record aligned with traditional network documentation while still allowing cross-domain evidence to be recorded.
