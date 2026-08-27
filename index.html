@@ -3,39 +3,39 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Network troubleshooting documentation organized by discipline, aspect and platform." />
-  <title>Network Troubleshooting Journal</title>
+  <meta name="description" content="Network engineering field notes organized by discipline, aspect and platform." />
+  <title>Network Engineering Field Notes</title>
   <link rel="stylesheet" href="assets/css/journal.css" />
 </head>
 <body>
   <header class="topbar">
     <div class="site-shell topbar-inner">
-      <a class="brand" href="index.html">Network Troubleshooting <span>Journal</span></a>
-      <nav class="topnav" aria-label="Documentation navigation">
+      <a class="brand" href="index.html">Network Engineering <span>Field Notes</span></a>
+      <nav class="topnav" aria-label="Field note navigation">
         <a href="#disciplines">Disciplines</a>
         <a href="#aspects">Aspects</a>
         <a href="#platforms">Platforms</a>
-        <a href="#documents">Documents</a>
+        <a href="#notes">Field Notes</a>
       </nav>
     </div>
   </header>
 
   <main class="site-shell">
     <header class="page-header">
-      <div class="kicker">Network engineering documentation</div>
-      <h1>Network Troubleshooting Journal</h1>
-      <p>Technical troubleshooting records organized by three primary classification dimensions: <strong>Discipline</strong>, <strong>Aspect</strong> and <strong>Platform</strong>.</p>
+      <div class="kicker">Network engineering</div>
+      <h1>Field Notes</h1>
+      <p>Practical notes from things I troubleshoot, test and validate in real network environments. The library is indexed by <strong>Discipline</strong>, <strong>Aspect</strong> and <strong>Platform</strong>.</p>
     </header>
 
-    <section class="catalog-grid" aria-label="Primary documentation classifications">
+    <section class="catalog-grid" aria-label="Primary field note classifications">
       <article class="catalog-panel" id="disciplines">
         <h2>Discipline</h2>
-        <p>Engineering domain in which the troubleshooting activity belongs.</p>
+        <p>The networking domain the work belongs to.</p>
         <ul class="catalog-list">
           <li><span>Routing</span></li>
           <li><span>Switching</span></li>
           <li><span>Firewall</span></li>
-          <li><a href="#documents">Wireless</a></li>
+          <li><a href="#notes">Wireless</a></li>
           <li><span>Identity</span></li>
           <li><span>PKI</span></li>
         </ul>
@@ -43,66 +43,60 @@
 
       <article class="catalog-panel" id="aspects">
         <h2>Aspect</h2>
-        <p>Specific function, subsystem or behavior being investigated.</p>
+        <p>The specific behavior or function being investigated.</p>
         <ul class="catalog-list">
-          <li><a href="#documents">Client Roaming</a></li>
-          <li><a href="#documents">RF Cell Sizing</a></li>
-          <li><a href="#documents">RRM / TPC</a></li>
-          <li><a href="#documents">Fast Transition (802.11r)</a></li>
-          <li><a href="#documents">802.1X Authentication</a></li>
-          <li><a href="#documents">EAP-TLS</a></li>
+          <li><a href="#notes">Client Roaming</a></li>
+          <li><a href="#notes">RF Cell Sizing</a></li>
+          <li><a href="#notes">RRM / TPC</a></li>
+          <li><a href="#notes">Fast Transition (802.11r)</a></li>
+          <li><a href="#notes">802.1X Authentication</a></li>
+          <li><a href="#notes">EAP-TLS</a></li>
         </ul>
       </article>
 
       <article class="catalog-panel" id="platforms">
         <h2>Platform</h2>
-        <p>Vendor platform or system on which the behavior is implemented or observed.</p>
+        <p>The product or system where the behavior is implemented or observed.</p>
         <ul class="catalog-list">
-          <li><a href="#documents">Cisco Catalyst 9800</a></li>
-          <li><a href="#documents">Cisco CW9176I</a></li>
-          <li><a href="#documents">Cisco ISE</a></li>
-          <li><a href="#documents">Windows 11</a></li>
-          <li><a href="#documents">Intel AX211</a></li>
+          <li><a href="#notes">Cisco Catalyst 9800</a></li>
+          <li><a href="#notes">Cisco CW9176I</a></li>
+          <li><a href="#notes">Cisco ISE</a></li>
+          <li><a href="#notes">Windows 11</a></li>
+          <li><a href="#notes">Intel AX211</a></li>
         </ul>
       </article>
     </section>
 
-    <h2 class="section-title" id="documents">Troubleshooting Documents</h2>
-    <div class="table-wrap">
-      <table aria-label="Troubleshooting document register">
-        <thead>
-          <tr>
-            <th>Document ID</th>
-            <th>Title</th>
-            <th>Discipline</th>
-            <th>Primary Aspect</th>
-            <th>Primary Platform</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><a href="cases/wireless/001-melbourne/index.html">NTJ-001</a></td>
-            <td><a href="cases/wireless/001-melbourne/index.html">Melbourne Office Wi-Fi Call Drops</a></td>
-            <td>Wireless</td>
-            <td>Client Roaming</td>
-            <td>Cisco Catalyst 9800 / CW9176I</td>
-            <td><span class="status warn">Monitoring</span></td>
-          </tr>
-        </tbody>
-      </table>
+    <h2 class="section-title" id="notes">Latest Field Notes</h2>
+    <div class="case-list">
+      <a class="case-link" href="cases/wireless/001-melbourne/index.html">
+        <div class="eyebrow-row" style="margin-bottom:6px">
+          <span class="eyebrow">Wireless · Client Roaming · Cisco Catalyst 9800</span>
+          <span class="badge warn">Monitoring</span>
+        </div>
+        <h2>Investigating Client Roaming and RF Overlap on Cisco Catalyst 9800</h2>
+        <p>I was looking into Wi-Fi interruptions during Teams calls. These notes cover the checks I made around 802.11r, RADIUS/ISE, matched AX211 clients, roaming behavior and 5 GHz cell overlap, plus the 17 → 14 dBm power test.</p>
+        <div class="tag-row">
+          <span class="tag">802.11r</span>
+          <span class="tag">RRM / TPC</span>
+          <span class="tag">RF</span>
+          <span class="tag">WPA3-Enterprise</span>
+          <span class="tag">EAP-TLS</span>
+          <span class="tag">5 / 6 GHz</span>
+        </div>
+      </a>
     </div>
 
-    <h2 class="section-title">Classification Method</h2>
+    <h2 class="section-title">How entries are classified</h2>
     <div class="doc-section">
-      <h2>Documentation rule</h2>
+      <h2>Discipline · Aspect · Platform</h2>
       <div class="content-block">
-        <p><strong>Discipline</strong> identifies the engineering domain. <strong>Aspect</strong> identifies the technical behavior being investigated. <strong>Platform</strong> identifies where that behavior is implemented or observed.</p>
-        <p>A troubleshooting record may reference multiple supporting disciplines, aspects and platforms, but one primary value is assigned to each dimension for indexing.</p>
+        <p><strong>Discipline</strong> identifies the networking domain. <strong>Aspect</strong> identifies what is being examined. <strong>Platform</strong> identifies where it is implemented.</p>
+        <p>Vendor products do not define the discipline. For example, SD-WAN path selection belongs under Routing whether the platform is Cisco SD-WAN or Fortinet Secure SD-WAN.</p>
       </div>
     </div>
   </main>
 
-  <footer class="site-shell footer-note">Network Troubleshooting Journal · Technical documentation repository</footer>
+  <footer class="site-shell footer-note">Network Engineering Field Notes · Troubleshooting, tests and things learned</footer>
 </body>
 </html>
