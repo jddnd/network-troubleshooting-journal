@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="A visual fieldbook of real network troubleshooting investigations." />
+  <title>Network Troubleshooting Journal</title>
+  <link rel="stylesheet" href="assets/css/journal.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="site-shell topbar-inner">
+      <a class="brand" href="index.html">Network Troubleshooting <span>Journal</span></a>
+      <nav class="topnav" aria-label="Disciplines">
+        <a href="#routing">Routing</a>
+        <a href="#switching">Switching</a>
+        <a href="#firewall">Firewall</a>
+        <a href="#wireless">Wireless</a>
+        <a href="#identity">Identity</a>
+        <a href="#pki">PKI</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-shell">
+    <section class="home-hero">
+      <div class="eyebrow">Engineering fieldbook</div>
+      <h1>How network problems are actually investigated.</h1>
+      <p>Cases preserve the reasoning path: symptom, fault domains, hypotheses, evidence, falsification, controlled change, verification and reusable engineering lessons.</p>
+    </section>
+
+    <section aria-labelledby="domains-title">
+      <h2 id="domains-title">Disciplines</h2>
+      <div class="domain-grid">
+        <div class="domain" id="routing">Routing</div>
+        <div class="domain" id="switching">Switching</div>
+        <div class="domain" id="firewall">Firewall</div>
+        <div class="domain" id="wireless">Wireless</div>
+        <div class="domain" id="identity">Identity</div>
+        <div class="domain" id="pki">PKI</div>
+      </div>
+    </section>
+
+    <section aria-labelledby="cases-title">
+      <div style="display:flex;justify-content:space-between;gap:16px;align-items:end;flex-wrap:wrap;margin-bottom:14px">
+        <div>
+          <div class="eyebrow">Case library</div>
+          <h2 id="cases-title" style="margin:4px 0 0;font-size:34px;letter-spacing:-.035em">Investigations</h2>
+        </div>
+        <span class="badge">1 working case</span>
+      </div>
+
+      <div class="case-list">
+        <a class="case-link" href="cases/wireless/001-melbourne/index.html">
+          <div class="eyebrow-row" style="margin-bottom:4px">
+            <span class="eyebrow">Wireless · NTJ-001</span>
+            <span class="badge warn">Monitoring</span>
+          </div>
+          <h2>Melbourne Office Wi-Fi Call Drops</h2>
+          <p><strong>Aspect:</strong> Client Roaming · RF Cell Sizing · RRM/TPC · 802.11r</p>
+          <p style="margin-top:7px">Authentication and endpoint hypotheses were progressively ruled down while traces and Auto-RF evidence pointed toward frequent roaming and very strong 5 GHz cell overlap.</p>
+          <div class="tag-row">
+            <span class="tag">Cisco Catalyst 9800</span>
+            <span class="tag">CW9176I</span>
+            <span class="tag">802.11r</span>
+            <span class="tag">EAP-TLS</span>
+            <span class="tag">5 / 6 GHz</span>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-shell footer-note">HTML tells the investigation · JSON describes the investigation · CSS/SVG make the reasoning visible</footer>
+</body>
+</html>
