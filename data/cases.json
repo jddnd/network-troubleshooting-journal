@@ -1,0 +1,36 @@
+[
+  {
+    "id": "NTJ-001",
+    "slug": "wireless/001-melbourne",
+    "title": "Melbourne Office Wi-Fi Call Drops",
+    "discipline": "Wireless",
+    "secondaryDisciplines": ["Identity", "PKI"],
+    "platform": {
+      "vendor": "Cisco",
+      "family": "Catalyst 9800",
+      "components": ["C9800-CL", "CW9176I"]
+    },
+    "supportingPlatforms": ["Cisco ISE", "Windows 11 / Intel AX211"],
+    "aspect": {
+      "primary": "Client Roaming",
+      "secondary": ["RF Cell Sizing", "RRM / TPC", "Fast Transition"]
+    },
+    "mechanisms": [
+      "802.11r",
+      "802.11k",
+      "802.11v",
+      "WPA3-Enterprise",
+      "802.1X",
+      "EAP-TLS",
+      "5 GHz",
+      "6 GHz"
+    ],
+    "symptoms": ["Teams call interruptions", "Perceived Wi-Fi disconnects"],
+    "status": "Monitoring",
+    "rootCauseConfidence": "Probable",
+    "publicReady": false,
+    "firstObserved": "2026-08-19",
+    "lastUpdated": "2026-08-27",
+    "path": "cases/wireless/001-melbourne/index.html"
+  }
+]
