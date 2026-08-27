@@ -1,27 +1,27 @@
-# Network Troubleshooting Journal
+# Network Engineering Field Notes
 
-Traditional network troubleshooting documentation organized by **Discipline**, **Aspect**, and **Platform**.
+A public collection of practical notes from network troubleshooting, testing and validation.
 
-The repository records technical investigations in a format similar to normal network engineering documentation: document control, scope, environment, relevant configuration, symptoms, evidence, findings, hypothesis status, changes, verification, assessment, outstanding actions, and CLI appendices.
+The goal is not to write formal incident reports or narrative case studies. Entries should read like the technical blogs and lab notes network engineers commonly publish: **what I was trying to understand, the environment, what I checked, what I observed, what I tried, the result, and what I would test next**.
 
 ## Classification model
 
-Every troubleshooting document is indexed using three independent dimensions.
+Every field note is indexed using three independent dimensions:
 
-### 1. Discipline
+### Discipline
+The networking domain the work belongs to:
 
-The engineering domain:
+- Routing
+- Switching
+- Firewall
+- Wireless
+- Identity
+- PKI
 
-- **Routing**
-- **Switching**
-- **Firewall**
-- **Wireless**
-- **Identity**
-- **PKI**
+Classification is based on the engineering problem, not the vendor appliance implementing it. For example, SD-WAN path selection belongs primarily under **Routing** whether it is implemented on Cisco SD-WAN or Fortinet Secure SD-WAN.
 
-### 2. Aspect
-
-The specific technical function or behavior being investigated.
+### Aspect
+The specific technical behavior or function being examined.
 
 Examples:
 
@@ -32,100 +32,55 @@ Examples:
 - Client Roaming
 - RF Cell Sizing
 - RRM / TPC
+- 802.11r Fast Transition
 - 802.1X Authentication
-- Certificate Chain Validation
+- EAP-TLS
+- Certificate Validation
 
-### 3. Platform
-
-The implementation on which the aspect is configured or observed.
+### Platform
+The product or system on which the behavior is implemented or observed.
 
 Examples:
 
 - Cisco IOS-XE
-- Cisco SD-WAN
 - Cisco Catalyst 9800
-- FortiGate
+- Cisco CW9176I
 - Cisco ISE
+- FortiGate
 - Windows 11
+- Intel AX211
 - Microsoft AD CS
 
-## Classification principle
+## Field note style
 
-> **Classify by the engineering problem, not by the vendor appliance running the feature.**
+A typical entry should use this structure when relevant:
 
-For example:
+1. **Context** — what I was working on or what triggered the test
+2. **Environment** — enough platform/configuration detail to understand the test
+3. **What I wanted to understand** — the technical question
+4. **What I checked** — commands, traces, counters, packet captures, logs or comparisons
+5. **What I observed** — concrete technical results
+6. **What I tried** — configuration change, lab test or controlled comparison
+7. **Result so far** — what the evidence currently supports
+8. **Notes / lessons** — reusable engineering observations
+9. **Next checks** — what remains open
+10. **Commands used** — useful CLI or tooling references
 
-- SD-WAN path selection on a FortiGate → **Routing / SD-WAN Path Selection / FortiGate**
-- NAT issue on a FortiGate → **Firewall / NAT / FortiGate**
-- 802.1X authorization issue on Cisco ISE → **Identity / 802.1X Authorization / Cisco ISE**
-- Certificate-chain issue on Cisco ISE → **PKI / Certificate Chain Validation / Cisco ISE**
+Not every note needs a final root cause. A useful entry may simply document how a feature behaves, a lab result, a migration gotcha, a comparison or an experiment.
 
-Vendor products therefore belong under **Platform**, not under Discipline or Aspect.
+## First field note
 
-See [`docs/CLASSIFICATION.md`](docs/CLASSIFICATION.md) for the detailed taxonomy.
+**Investigating Client Roaming and RF Overlap on Cisco Catalyst 9800**
 
-## Troubleshooting document format
+- Discipline: Wireless
+- Primary aspect: Client Roaming
+- Other aspects: RF Cell Sizing, RRM/TPC, Fast Transition
+- Platform: Cisco Catalyst 9800 / CW9176I
+- Related systems: Cisco ISE, Windows 11, Intel AX211
+- Status: Monitoring after a 5 GHz transmit-power test
 
-The public troubleshooting record is HTML so it can use tables, collapsible CLI evidence, diagrams, and other technical presentation features while still behaving like traditional documentation.
+## Publishing model
 
-A standard record contains:
+The public site is static HTML published through GitHub Pages. JSON keeps the classification metadata machine-readable, while HTML is used for the actual technical field notes so tables, CLI, diagrams and richer visualizations remain available.
 
-1. Document Control
-2. Scope
-3. Environment
-4. Relevant Configuration
-5. Reported Symptoms
-6. Evidence Summary
-7. Technical Findings
-8. Hypothesis Status
-9. Change Record
-10. Verification
-11. Current Technical Assessment
-12. Outstanding Actions
-13. Appendices / Raw Evidence
-
-HTML is used for the document itself. JSON is used for indexing and metadata. Markdown is used for repository guidance and standards.
-
-## Repository structure
-
-```text
-network-troubleshooting-journal/
-├── index.html
-├── README.md
-├── assets/
-│   ├── css/
-│   │   └── journal.css
-│   └── js/
-│       └── case.js
-├── data/
-│   └── cases.json
-├── cases/
-│   ├── routing/
-│   ├── switching/
-│   ├── firewall/
-│   ├── wireless/
-│   │   └── 001-melbourne/
-│   │       └── index.html
-│   ├── identity/
-│   └── pki/
-└── docs/
-    ├── CLASSIFICATION.md
-    └── WEBSITE_PLAN.md
-```
-
-## NTJ-001
-
-**Melbourne Office Wi-Fi Call Drops**
-
-```text
-Discipline: Wireless
-Primary Aspect: Client Roaming
-Primary Platform: Cisco Catalyst 9800 / CW9176I
-Status: Monitoring
-```
-
-Secondary aspects include RF Cell Sizing, RRM/TPC, and Fast Transition. Identity and PKI are supporting disciplines because Cisco ISE and EAP-TLS were investigated as possible fault domains.
-
-## Publication rule
-
-Troubleshooting records intended for the public site must be sanitized. Remove or generalize company names, usernames, internal hostnames, internal IP addresses, endpoint MAC addresses, certificate details, secrets, and other identifying infrastructure data unless intentionally published.
+Public entries must be sanitized before publication. Internal hostnames, IP addresses, usernames, MAC addresses, secrets, certificate details and identifying operational data should not be published unless deliberately intended.
