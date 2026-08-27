@@ -1,8 +1,9 @@
 [
   {
     "id": "NTJ-001",
+    "type": "field-note",
     "slug": "wireless/001-melbourne",
-    "title": "Melbourne Office Wi-Fi Call Drops",
+    "title": "Investigating Client Roaming and RF Overlap on Cisco Catalyst 9800",
     "discipline": "Wireless",
     "secondaryDisciplines": ["Identity", "PKI"],
     "platform": {
@@ -10,7 +11,7 @@
       "family": "Catalyst 9800",
       "components": ["C9800-CL", "CW9176I"]
     },
-    "supportingPlatforms": ["Cisco ISE", "Windows 11 / Intel AX211"],
+    "supportingPlatforms": ["Cisco ISE", "Windows 11", "Intel AX211"],
     "aspect": {
       "primary": "Client Roaming",
       "secondary": ["RF Cell Sizing", "RRM / TPC", "Fast Transition"]
@@ -25,10 +26,8 @@
       "5 GHz",
       "6 GHz"
     ],
-    "symptoms": ["Teams call interruptions", "Perceived Wi-Fi disconnects"],
     "status": "Monitoring",
-    "rootCauseConfidence": "Probable",
-    "publicReady": false,
+    "publicReady": true,
     "firstObserved": "2026-08-19",
     "lastUpdated": "2026-08-27",
     "path": "cases/wireless/001-melbourne/index.html"
